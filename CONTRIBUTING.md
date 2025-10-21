@@ -4,10 +4,16 @@
 
 1. Install standalone Tailwind CSS CLI executable:
 
-   Mac/Linux:
+   Mac:
 
    ```bash
-   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64  && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+   ```
+
+   Linux:
+
+   ```bash
+   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
    ```
 
    Windows:
@@ -47,4 +53,3 @@ The solution is configured for two development modes:
 1. Debug/Development (default):
    - Use `dotnet watch`
    - F5 to run and debug
-

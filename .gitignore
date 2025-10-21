@@ -507,3 +507,4 @@ dotnet/
 dotnet-install.sh
 
 
+src/WebApp/tools/tailwindcss

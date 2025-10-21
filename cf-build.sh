@@ -40,6 +40,15 @@ fi
 BRANCH=$(git branch --show-current)
 echo "Building branch: $BRANCH"
 
+# Download and setup Tailwind CSS
+echo "Downloading Tailwind CSS executable..."
+mkdir -p src/WebApp/tools
+cd src/WebApp/tools
+curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+chmod +x tailwindcss-linux-x64
+mv tailwindcss-linux-x64 tailwindcss
+cd ../../..
+echo "Tailwind CSS executable ready"
 
 # Main branch - use published packages
 echo "Publishing DemoApp with published packages..."
