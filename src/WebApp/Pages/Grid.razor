@@ -1,0 +1,39 @@
+@page "/grid"
+
+@inject PokemonService PokemonService
+
+<PageTitle>Grid</PageTitle>
+
+<h1 class="font-semibold text-2xl mb-2">Grid</h1>
+
+<div class="grid flowbite-grid text-xs">
+    <QuickGrid Items="@FilteredPokemon" Theme="flowbite">
+        <PropertyColumn Property="@(p => p.Id)" Title="#" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Property="@(p => p.Name)" Title="Name" Sortable="true">
+            <ColumnOptions>
+                <div class="search-box">
+                    <input type="search" autofocus @bind="_nameFilter" @bind:event="oninput" placeholder="Search..." />
+                </div>
+            </ColumnOptions>
+        </PropertyColumn>
+        <PropertyColumn Property="@(p => p.Type1)" Title="Type" Sortable="true" />
+        <PropertyColumn Property="@(p => p.HP)" Title="HP" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Property="@(p => p.Attack)" Title="Attack" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Property="@(p => p.Defense)" Title="Defense" Sortable="true" Align="Align.Center" />
+    </QuickGrid>
+</div>
+
+@code {
+    private IQueryable<Pokemon> _pokemon = default!;
+    private string _nameFilter = string.Empty;
+
+    private IQueryable<Pokemon> FilteredPokemon =>
+        string.IsNullOrEmpty(_nameFilter)
+            ? _pokemon
+            : _pokemon.Where(p => p.Name.Contains(_nameFilter, StringComparison.OrdinalIgnoreCase));
+
+    protected override void OnInitialized()
+    {
+        _pokemon = PokemonService.GetPokemon();
+    }
+}

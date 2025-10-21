@@ -1,0 +1,26 @@
+@inherits FlowbiteComponentBase
+@using System.Reflection
+
+
+<span class=@CombineClasses(Class)>v@_appVersion</span>
+
+@code
+{
+    private string _appVersion = "";
+
+    protected override void OnInitialized()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var applicationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        _appVersion = applicationVersion ?? "UNDEFINED";
+
+        @* if the version contains the '+' then the assembly version, then only
+           display the content prior to the character.
+         *@
+        var plusCharIndex = _appVersion.IndexOf('+');
+        if (plusCharIndex > -1)
+        {
+            _appVersion = _appVersion.Substring(0, plusCharIndex);
+        }
+    }
+}
