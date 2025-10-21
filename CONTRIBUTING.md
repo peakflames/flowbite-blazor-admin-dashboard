@@ -53,3 +53,38 @@ The solution is configured for two development modes:
 1. Debug/Development (default):
    - Use `dotnet watch`
    - F5 to run and debug
+
+### Static Build and Serve
+
+To build and serve the WASM app as static files locally:
+
+1. **Install dotnet-serve tool** (one-time setup):
+
+   ```bash
+   dotnet tool install --global dotnet-serve
+   ```
+
+2. **Publish the WASM app to a static directory**:
+
+   ```bash
+   dotnet publish src/WebApp/WebApp.csproj -c Release -o dist
+   ```
+
+   This creates a production-ready build in the `dist` directory.
+
+3. **Serve the static files locally**:
+
+   ```bash
+   dotnet serve -d dist/wwwroot -p 8080
+   ```
+
+   Then open <http://localhost:8080/> in your browser.
+
+   **Note**: The `-d dist/wwwroot` flag points to the wwwroot directory inside the dist folder, which contains the actual static files. The `-p 8080` flag specifies the port (you can change this if needed).
+
+4. **Stop the server**: Press `Ctrl+C` in the terminal to stop the server.
+
+This workflow is useful for:
+- Testing the production build locally
+- Verifying the app works as static files before deployment
+- Simulating the deployed environment
