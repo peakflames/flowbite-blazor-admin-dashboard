@@ -1,83 +1,82 @@
 # Contributing to Flowbite Blazor Dashboard
 
-## Development Setup
+## Prerequisites
 
-1. Install standalone Tailwind CSS CLI executable:
+- **Python 3.x** - Required to run the build script (uses only standard library, no pip packages needed)
+- **.NET SDK 9.0+** - Will be automatically downloaded by the build script if not installed
+- **Tailwind CSS** - Will be automatically downloaded by the build script if not present
 
-   Mac:
+## Quick Start
 
+The project includes a `build.py` script that automates the setup and build process:
+
+1. **Build the project** (default):
    ```bash
-   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+   python build.py
+   # or on Unix-like systems with executable permissions:
+   ./build.py
    ```
 
-   Linux:
-
+2. **Run the application**:
    ```bash
-   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
+   python build.py run
    ```
-
-   Windows:
-
-   ```pwsh
-   mkdir ./src/WebApp/tools -Force; `
-   cd ./src/WebApp/tools; `
-   Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-windows-x64.exe" `
-      -OutFile "tailwindcss.exe" `
-      -UseBasicParsing ; `
-   cd ../../..
-
-   ```
-
-1. Build the solution
-
-   ```bash
-   cd ./src/WebApp
-   dotnet build
-   ```
-
-1. Run the Blazor WASM Static Web App
-
-   ```bash
-   cd ./src/WebApp
-   dotnet run
-   ```
-
    Then open <http://localhost:5269/> in your browser.
+
+3. **Development with hot reload**:
+   ```bash
+   python build.py watch
+   ```
+   Press `Ctrl+C` to stop watching.
+
+4. **Create production build**:
+   ```bash
+   python build.py publish
+   ```
+   Output will be in the `./dist` directory.
+
+The build script automatically:
+- Detects your operating system (Windows, Linux, macOS)
+- Downloads the appropriate Tailwind CSS executable if needed
+- Checks for .NET SDK 9.0+ and installs it locally if not found
+- Runs the requested build command
 
 ## Development Workflow
 
-### Local Development
+### Using the Build Script (Recommended)
 
-The solution is configured for two development modes:
+The `build.py` script provides four commands:
 
-1. Debug/Development (default):
-   - Use `dotnet watch`
-   - F5 to run and debug
+- `python build.py` or `python build.py build` - Build the project
+- `python build.py run` - Run the application
+- `python build.py watch` - Run with hot reload for development
+- `python build.py publish` - Create production build in `./dist`
+
+### IDE Development
+
+1. **Debug/Development** (default):
+   - Use `dotnet watch` directly
+   - Press F5 in Visual Studio Code to run and debug
 
 ### Static Build and Serve
 
 To build and serve the WASM app as static files locally:
 
 1. **Install dotnet-serve tool** (one-time setup):
-
    ```bash
    dotnet tool install --global dotnet-serve
    ```
 
-2. **Publish the WASM app to a static directory**:
-
+2. **Publish the WASM app** using the build script:
    ```bash
-   dotnet publish src/WebApp/WebApp.csproj -c Release -o dist
+   python build.py publish
    ```
-
-   This creates a production-ready build in the `dist` directory.
+   This creates a production-ready build in the `./dist` directory.
 
 3. **Serve the static files locally**:
-
    ```bash
    dotnet serve -d dist/wwwroot -p 8080
    ```
-
    Then open <http://localhost:8080/> in your browser.
 
    **Note**: The `-d dist/wwwroot` flag points to the wwwroot directory inside the dist folder, which contains the actual static files. The `-p 8080` flag specifies the port (you can change this if needed).
@@ -88,3 +87,47 @@ This workflow is useful for:
 - Testing the production build locally
 - Verifying the app works as static files before deployment
 - Simulating the deployed environment
+
+## Advanced Setup
+
+### Manual Tailwind CSS Installation
+
+If you prefer to manually install Tailwind CSS instead of using the build script:
+
+**macOS:**
+```bash
+mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+```
+
+**Linux:**
+```bash
+mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
+```
+
+**Windows (PowerShell):**
+```powershell
+mkdir ./src/WebApp/tools -Force; `
+cd ./src/WebApp/tools; `
+Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-windows-x64.exe" `
+   -OutFile "tailwindcss.exe" `
+   -UseBasicParsing ; `
+cd ../../..
+```
+
+### Using .NET CLI Directly
+
+If you prefer to use .NET CLI commands directly instead of the build script:
+
+```bash
+# Build
+dotnet build src/WebApp/WebApp.csproj
+
+# Run
+dotnet run --project src/WebApp/WebApp.csproj
+
+# Watch (hot reload)
+dotnet watch --project src/WebApp/WebApp.csproj
+
+# Publish
+dotnet publish src/WebApp/WebApp.csproj -c Release -o dist
+```
