@@ -6,6 +6,34 @@
 - **.NET SDK 9.0+** - Will be automatically downloaded by the build script if not installed
 - **Tailwind CSS** - Will be automatically downloaded by the build script if not present
 
+## AI Assistant Integration
+
+This project includes a `CLAUDE.md` file that provides architectural guidance to AI coding assistants and team members. If you're using the Cline AI assistant, you may want to create a symbolic link so it can access this documentation:
+
+**Linux/macOS/WSL:**
+```bash
+mkdir -p .clinerules
+ln -s ../CLAUDE.md .clinerules/AGENT.md
+```
+
+**Windows (Command Prompt - requires Administrator privileges):**
+```cmd
+mkdir .clinerules
+mklink .clinerules\AGENT.md ..\CLAUDE.md
+```
+
+**Windows (PowerShell - requires Administrator privileges):**
+```powershell
+New-Item -ItemType Directory -Force -Path .clinerules
+New-Item -ItemType SymbolicLink -Path .clinerules\AGENT.md -Target ..\CLAUDE.md
+```
+
+**Note**: On Windows, if you don't have administrator privileges, you can simply copy the file instead:
+```powershell
+Copy-Item CLAUDE.md .clinerules\AGENT.md
+```
+However, with a copy, you'll need to manually keep both files in sync when updates are made.
+
 ## Quick Start
 
 The project includes a `build.py` script that automates the setup and build process:
