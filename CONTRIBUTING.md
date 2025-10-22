@@ -7,13 +7,13 @@
    Mac:
 
    ```bash
-   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
    ```
 
    Linux:
 
    ```bash
-   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
+   mkdir ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
    ```
 
    Windows:
@@ -21,7 +21,7 @@
    ```pwsh
    mkdir ./src/WebApp/tools -Force; `
    cd ./src/WebApp/tools; `
-   Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-windows-x64.exe" `
+   Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-windows-x64.exe" `
       -OutFile "tailwindcss.exe" `
       -UseBasicParsing ; `
    cd ../../..

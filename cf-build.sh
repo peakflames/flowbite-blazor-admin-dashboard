@@ -44,7 +44,7 @@ echo "Building branch: $BRANCH"
 echo "Downloading Tailwind CSS executable..."
 mkdir -p src/WebApp/tools
 cd src/WebApp/tools
-curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64
+curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-linux-x64
 chmod +x tailwindcss-linux-x64
 mv tailwindcss-linux-x64 tailwindcss
 cd ../../..
