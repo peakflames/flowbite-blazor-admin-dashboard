@@ -1,0 +1,432 @@
+# Flowbite Blazor Migration Memory Log
+
+**Purpose**: This file is Claude Code's persistent memory. Every Claude Code session MUST read this file first to understand project context, progress, and learnings.
+
+**Last Updated**: 2025-01-23 (Initial creation)
+
+---
+
+## Quick Status
+
+- **Current Phase**: Not started
+- **Overall Progress**: 0/23 tasks complete (0%)
+- **Phase 1 (Layout)**: 0/5 complete
+- **Phase 2 (Settings)**: 0/13 complete
+- **Phase 3 (Playground)**: 0/5 complete
+
+---
+
+## Phase 1: Layout Refinements (5 tasks)
+
+### Task 1.1: Create LayoutBase.razor
+**Status**: ⬜ Not started
+**Description**: Extract common layout functionality into base class for MainLayout and StackedLayout
+**Location**: src/WebApp/Layout/LayoutBase.razor
+**Completion Date**: N/A
+**Code Patterns Used**: N/A
+**Learnings**: N/A
+
+### Task 1.2: Refactor MainLayout.razor
+**Status**: ⬜ Not started
+**Description**: Inherit from LayoutBase, improve sidebar state management, add responsive overlay
+**Location**: src/WebApp/Layout/MainLayout.razor
+**Completion Date**: N/A
+**Code Patterns Used**: N/A
+**Learnings**: N/A
+
+### Task 1.3: Create StackedLayout.razor
+**Status**: ⬜ Not started
+**Description**: Implement stacked/full-width layout variant for pages without sidebar
+**Location**: src/WebApp/Layout/StackedLayout.razor
+**Completion Date**: N/A
+**Code Patterns Used**: N/A
+**Learnings**: N/A
+
+### Task 1.4: Dark Mode Consistency
+**Status**: ⬜ Not started
+**Description**: Verify dark: classes across all layout components (Navbar, Sidebar, Footer)
+**Files**: All layout components
+**Completion Date**: N/A
+**Issues Found**: N/A
+**Learnings**: N/A
+
+### Task 1.5: Sidebar Responsive Behavior
+**Status**: ⬜ Not started
+**Description**: Mobile overlay behavior, desktop persistent sidebar, smooth transitions
+**Files**: MainLayout.razor, AppSidebar.razor
+**Completion Date**: N/A
+**Code Patterns Used**: N/A
+**Learnings**: N/A
+
+---
+
+## Phase 2: Settings Page (13 tasks)
+
+### Task 2.1: Create Domain Models
+**Status**: ⬜ Not started
+**Files to create**:
+- src/WebApp/Domain/UserSettings.cs
+- src/WebApp/Domain/NotificationItem.cs
+- src/WebApp/Domain/SessionInfo.cs
+- src/WebApp/Domain/SocialAccount.cs
+**Completion Date**: N/A
+**Properties Defined**: N/A
+**Learnings**: N/A
+
+### Task 2.2: Create SettingsService.cs
+**Status**: ⬜ Not started
+**Description**: Event-based state management service for Settings data
+**Location**: src/WebApp/Services/SettingsService.cs
+**Completion Date**: N/A
+**Pattern Used**: Service with event-based notifications
+**Learnings**: N/A
+
+### Task 2.3: Register SettingsService
+**Status**: ⬜ Not started
+**File**: src/WebApp/Program.cs
+**Registration Type**: Scoped
+**Completion Date**: N/A
+**Learnings**: N/A
+
+### Task 2.4: Create UserProfile.razor
+**Status**: ⬜ Not started
+**Description**: User avatar upload component with profile image
+**Location**: src/WebApp/Components/Settings/UserProfile.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/UserProfile.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**RenderFragments**: N/A
+**EventCallbacks**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.5: Create GeneralInfo.razor
+**Status**: ⬜ Not started
+**Description**: General information form with validation (name, email, organization, etc.)
+**Location**: src/WebApp/Components/Settings/GeneralInfo.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/GeneralInfo.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Form Pattern**: EditForm + DataAnnotationsValidator
+**Validation Attributes**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.6: Create PasswordInfo.razor
+**Status**: ⬜ Not started
+**Description**: Password change form with current/new/confirm fields
+**Location**: src/WebApp/Components/Settings/PasswordInfo.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/(Note: May not exist in Svelte, check types.ts)
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Form Pattern**: N/A
+**Validation Rules**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.7: Create LanguageTime.razor
+**Status**: ⬜ Not started
+**Description**: Language and timezone dropdown selections
+**Location**: src/WebApp/Components/Settings/LanguageTime.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/LanguageTime.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Dropdown Pattern**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.8: Create SocialAccounts.razor
+**Status**: ⬜ Not started
+**Description**: Connect/disconnect social media accounts (Facebook, Twitter, GitHub)
+**Location**: src/WebApp/Components/Settings/SocialAccounts.razor
+**Svelte Reference**: Check types.ts for SocialAccount type
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**List Rendering Pattern**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.9: Create Accounts.razor
+**Status**: ⬜ Not started
+**Description**: Email notification preferences with toggle switches
+**Location**: src/WebApp/Components/Settings/Accounts.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/Accounts.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Toggle Pattern**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.10: Create Sessions.razor
+**Status**: ⬜ Not started
+**Description**: Active sessions list with sign-out functionality
+**Location**: src/WebApp/Components/Settings/Sessions.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/Sessions.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**List Rendering Pattern**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.11: Create NotificationCard.razor
+**Status**: ⬜ Not started
+**Description**: Notification preferences card with toggle switches
+**Location**: src/WebApp/Components/Settings/NotificationCard.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/NotificationCard.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Toggle Pattern**: N/A
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.12: Create Settings.razor Page
+**Status**: ⬜ Not started
+**Description**: Assemble all Settings components with responsive 3-column grid layout
+**Location**: src/WebApp/Pages/Settings.razor
+**Route**: @page "/settings"
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/routes/(sidebar)/settings/+page.svelte
+**Completion Date**: N/A
+**Grid Pattern**: grid-cols-1 xl:grid-cols-3
+**Service Injection**: SettingsService
+**Issues Encountered**: N/A
+**Learnings**: N/A
+
+### Task 2.13: Add Settings Navigation Link
+**Status**: ⬜ Not started
+**File**: src/WebApp/Layout/AppSidebar.razor
+**Link Text**: "Settings"
+**Icon**: Cog or Settings icon
+**Route**: /settings
+**Completion Date**: N/A
+**Learnings**: N/A
+
+---
+
+## Phase 3: Playground Pages (5 tasks)
+
+### Task 3.1: Create EmptyCard.razor
+**Status**: ⬜ Not started
+**Description**: Empty state component for playground grid cells
+**Location**: src/WebApp/Components/EmptyCard.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/EmptyCard.svelte
+**Completion Date**: N/A
+**Parameters Used**: N/A
+**Styling Pattern**: N/A
+**Learnings**: N/A
+
+### Task 3.2: Create Playground.razor Component
+**Status**: ⬜ Not started
+**Description**: Reusable playground grid component (6x6 grid of EmptyCards)
+**Location**: src/WebApp/Components/Playground.razor
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/lib/Playground.svelte
+**Completion Date**: N/A
+**Grid Pattern**: N/A
+**Loop Pattern**: N/A
+**Learnings**: N/A
+
+### Task 3.3: Create PlaygroundSidebar.razor Page
+**Status**: ⬜ Not started
+**Description**: Playground page with sidebar layout
+**Location**: src/WebApp/Pages/PlaygroundSidebar.razor
+**Route**: @page "/playground/sidebar"
+**Layout**: Uses default MainLayout
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/routes/(sidebar)/playground/sidebar/+page.svelte
+**Completion Date**: N/A
+**Learnings**: N/A
+
+### Task 3.4: Create PlaygroundStacked.razor Page
+**Status**: ⬜ Not started
+**Description**: Playground page with stacked/full-width layout
+**Location**: src/WebApp/Pages/PlaygroundStacked.razor
+**Route**: @page "/playground/stacked"
+**Layout**: @layout StackedLayout (requires Task 1.3)
+**Svelte Reference**: /mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/routes/(no-sidebar)/playground/stacked/+page.svelte
+**Completion Date**: N/A
+**Learnings**: N/A
+
+### Task 3.5: Add Playground Navigation Links
+**Status**: ⬜ Not started
+**Files**:
+- src/WebApp/Layout/AppSidebar.razor (for sidebar playground link)
+- src/WebApp/Layout/StackedLayout.razor navbar (for stacked playground link)
+**Links**:
+- "Playground - Sidebar" → /playground/sidebar
+- "Playground - Stacked" → /playground/stacked
+**Completion Date**: N/A
+**Learnings**: N/A
+
+---
+
+## Pattern Library
+
+### RenderFragment Pattern
+**When to use**: Component needs child content or templated sections
+**Example**:
+```csharp
+[Parameter]
+public RenderFragment? ChildContent { get; set; }
+
+// Usage in razor:
+@if (ChildContent != null)
+{
+    @ChildContent
+}
+```
+
+### EventCallback Pattern
+**When to use**: Component needs to notify parent of events
+**Example**:
+```csharp
+[Parameter]
+public EventCallback<UserSettings> OnSave { get; set; }
+
+private async Task HandleSubmit()
+{
+    await OnSave.InvokeAsync(Model);
+}
+```
+
+### Service State Management Pattern
+**When to use**: State needs to be shared across components
+**Example**:
+```csharp
+public class SettingsService
+{
+    private UserSettings _settings = new();
+    public event Action? OnChange;
+
+    public UserSettings Current => _settings;
+
+    public void Update(UserSettings settings)
+    {
+        _settings = settings;
+        OnChange?.Invoke();
+    }
+}
+
+// In component:
+protected override void OnInitialized()
+{
+    SettingsService.OnChange += StateHasChanged;
+}
+
+public void Dispose()
+{
+    SettingsService.OnChange -= StateHasChanged;
+}
+```
+
+### EditForm with Validation Pattern
+**When to use**: Forms that need data validation
+**Example**:
+```razor
+<EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <Label For="email" Value="Email" />
+    <TextInput @bind-Value="Model.Email" />
+    <ValidationMessage For="() => Model.Email" />
+
+    <Button Type="ButtonType.Submit">Save</Button>
+</EditForm>
+
+@code {
+    public class FormModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = "";
+    }
+
+    private FormModel Model = new();
+
+    private void HandleValidSubmit()
+    {
+        // Form is valid, process submission
+    }
+}
+```
+
+### Two-Way Binding Pattern
+**When to use**: Parent and child need to share mutable state
+**Example**:
+```csharp
+// Child component:
+[Parameter]
+public string Value { get; set; } = "";
+
+[Parameter]
+public EventCallback<string> ValueChanged { get; set; }
+
+private async Task UpdateValue(string newValue)
+{
+    Value = newValue;
+    await ValueChanged.InvokeAsync(newValue);
+}
+
+// Parent usage:
+<ChildComponent @bind-Value="_myValue" />
+```
+
+---
+
+## Common Issues & Solutions
+
+### Issue: [Will be added as encountered]
+**Encountered in**: [Task/Component name]
+**Description**: [Problem description]
+**Solution**: [How it was resolved]
+**Date**: [Date encountered]
+
+---
+
+## Key Decisions Made
+
+### Decision: [Will be added as decisions are made]
+**Context**: [Why the decision was needed]
+**Options Considered**: [Alternative approaches]
+**Decision**: [What was chosen]
+**Rationale**: [Why this approach was selected]
+**Date**: [Date decided]
+
+---
+
+## Testing Notes
+
+### Component: [Component name]
+**Functionality Tests**:
+- [ ] [Test description]
+
+**Responsive Tests**:
+- [ ] Mobile (< 640px)
+- [ ] Tablet (640px - 1024px)
+- [ ] Desktop (> 1024px)
+
+**Dark Mode Tests**:
+- [ ] Light mode styling
+- [ ] Dark mode styling
+- [ ] Toggle transition
+
+**Status**: [Pass/Fail/Not tested]
+**Date**: [Test date]
+
+---
+
+## Blockers & Incomplete Work
+
+[Claude Code will add notes here about:]
+- Tasks that are blocked waiting for other tasks
+- Incomplete work that needs to be resumed
+- Questions that need user input
+- Known issues that need investigation
+
+---
+
+## Notes for Future Sessions
+
+[Claude Code will add notes here about:]
+- Things to remember for next session
+- Patterns that worked particularly well
+- Approaches that should be avoided
+- Tips for similar future tasks
