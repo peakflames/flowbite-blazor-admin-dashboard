@@ -8,7 +8,7 @@
 *@
 
 <div class="@GetLayoutClasses()">
-    @RenderLayout()
+    @LayoutContent
 </div>
 
 @code {
@@ -18,11 +18,22 @@
     protected virtual string GetLayoutClasses() => "";
 
     /// <summary>
-    /// Override in derived classes to provide the complete layout structure.
+    /// Derived classes should set this property in OnInitialized to provide the complete layout structure.
     /// Default implementation simply renders the Body content.
     /// </summary>
-    protected virtual RenderFragment RenderLayout() => builder =>
+    protected RenderFragment LayoutContent { get; set; } = default!;
+
+    protected override void OnInitialized()
     {
-        builder.AddContent(0, Body);
-    };
+        base.OnInitialized();
+
+        // Subscribe to navigation events
+        InitializeNavigation();
+
+        // Default implementation if derived class doesn't set LayoutContent
+        if (LayoutContent == null)
+        {
+            LayoutContent = builder => builder.AddContent(0, Body);
+        }
+    }
 }

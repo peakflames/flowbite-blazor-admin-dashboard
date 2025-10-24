@@ -14,11 +14,15 @@
     protected override string GetLayoutClasses() => "antialiased h-screen flex flex-col bg-gray-50 dark:bg-gray-900";
 
     /// <summary>
-    /// Renders the complete MainLayout structure with navbar, sidebar, main content, and footer.
+    /// Initialize the layout content with navbar, sidebar, main content, and footer.
     /// Uses IsMobileMenuOpen from LayoutBase for responsive sidebar behavior.
     /// </summary>
-    protected override RenderFragment RenderLayout() => builder =>
+    protected override void OnInitialized()
     {
+        base.OnInitialized();
+
+        LayoutContent = builder =>
+        {
         var sequence = 0;
 
         // AppNavBar
@@ -70,7 +74,8 @@
         builder.CloseComponent();
 
         builder.CloseElement(); // flex container div
-    };
+        };
+    }
 
     /// <summary>
     /// Generates CSS classes for the sidebar based on mobile menu open state.

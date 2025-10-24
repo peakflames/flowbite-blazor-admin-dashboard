@@ -20,27 +20,32 @@
     protected override string GetLayoutClasses() => "antialiased bg-gray-50 dark:bg-gray-900 min-h-screen";
 
     /// <summary>
-    /// Renders the complete StackedLayout structure with navbar, main content, and footer.
+    /// Initialize the StackedLayout content with navbar, main content, and footer.
     /// No sidebar - provides full-width content area with max-width constraint.
     /// </summary>
-    protected override RenderFragment RenderLayout() => builder =>
+    protected override void OnInitialized()
     {
-        var sequence = 0;
+        base.OnInitialized();
 
-        // AppNavBar (without sidebar toggle)
-        builder.OpenComponent<AppNavBar>(sequence++);
-        builder.AddAttribute(sequence++, "ResponsiveMenuEnabled", false);
-        builder.AddAttribute(sequence++, "ShowSidebarToggle", false);
-        builder.CloseComponent();
+        LayoutContent = builder =>
+        {
+            var sequence = 0;
 
-        // Main content area (full-width with max-width constraint)
-        builder.OpenElement(sequence++, "main");
-        builder.AddAttribute(sequence++, "class", "p-4 h-auto pt-20 max-w-screen-2xl mx-auto");
-        builder.AddContent(sequence++, Body);
-        builder.CloseElement(); // main
+            // AppNavBar (without sidebar toggle)
+            builder.OpenComponent<AppNavBar>(sequence++);
+            builder.AddAttribute(sequence++, "ResponsiveMenuEnabled", false);
+            builder.AddAttribute(sequence++, "ShowSidebarToggle", false);
+            builder.CloseComponent();
 
-        // Footer
-        builder.OpenComponent<AppFooter>(sequence++);
-        builder.CloseComponent();
-    };
+            // Main content area (full-width with max-width constraint)
+            builder.OpenElement(sequence++, "main");
+            builder.AddAttribute(sequence++, "class", "p-4 h-auto pt-20 max-w-screen-2xl mx-auto");
+            builder.AddContent(sequence++, Body);
+            builder.CloseElement(); // main
+
+            // Footer
+            builder.OpenComponent<AppFooter>(sequence++);
+            builder.CloseComponent();
+        };
+    }
 }

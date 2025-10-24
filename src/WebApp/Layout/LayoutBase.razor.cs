@@ -28,15 +28,6 @@ public partial class LayoutBase : LayoutComponentBase, IDisposable
     }
 
     /// <summary>
-    /// Lifecycle method called when the component is initialized.
-    /// Subscribes to navigation events to auto-close mobile menu on navigation.
-    /// </summary>
-    protected override void OnInitialized()
-    {
-        Navigation.LocationChanged += OnLocationChanged;
-    }
-
-    /// <summary>
     /// Event handler for navigation changes.
     /// Automatically closes the mobile menu when navigating to a new page.
     /// </summary>
@@ -44,6 +35,14 @@ public partial class LayoutBase : LayoutComponentBase, IDisposable
     {
         IsMobileMenuOpen = false;
         StateHasChanged();
+    }
+
+    /// <summary>
+    /// Subscribes to navigation events. Called from OnInitialized in the .razor file.
+    /// </summary>
+    protected void InitializeNavigation()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
     }
 
     /// <summary>
