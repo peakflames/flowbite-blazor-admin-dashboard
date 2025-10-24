@@ -1,0 +1,46 @@
+@inherits LayoutBase
+
+@*
+    StackedLayout.razor
+    Full-width layout variant without sidebar for pages like Playground.
+    Provides maximum content area with centered, constrained width container.
+*@
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    /// <summary>
+    /// Provides custom CSS classes for the root layout container.
+    /// Includes antialiased text, minimum full-screen height, and dark mode support.
+    /// </summary>
+    protected override string GetLayoutClasses() => "antialiased bg-gray-50 dark:bg-gray-900 min-h-screen";
+
+    /// <summary>
+    /// Renders the complete StackedLayout structure with navbar, main content, and footer.
+    /// No sidebar - provides full-width content area with max-width constraint.
+    /// </summary>
+    protected override RenderFragment RenderLayout() => builder =>
+    {
+        var sequence = 0;
+
+        // AppNavBar (without sidebar toggle)
+        builder.OpenComponent<AppNavBar>(sequence++);
+        builder.AddAttribute(sequence++, "ResponsiveMenuEnabled", false);
+        builder.AddAttribute(sequence++, "ShowSidebarToggle", false);
+        builder.CloseComponent();
+
+        // Main content area (full-width with max-width constraint)
+        builder.OpenElement(sequence++, "main");
+        builder.AddAttribute(sequence++, "class", "p-4 h-auto pt-20 max-w-screen-2xl mx-auto");
+        builder.AddContent(sequence++, Body);
+        builder.CloseElement(); // main
+
+        // Footer
+        builder.OpenComponent<AppFooter>(sequence++);
+        builder.CloseComponent();
+    };
+}

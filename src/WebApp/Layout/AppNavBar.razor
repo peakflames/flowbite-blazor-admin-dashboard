@@ -7,7 +7,7 @@
         <!-- Left-Side Component Group -->
         <div class="flex justify-start items-center">
 
-            @if (ResponsiveMenuEnabled)
+            @if (ResponsiveMenuEnabled && ShowSidebarToggle)
             {
                 <button id="responsive-menu-toggle"
                     @onclick="OnResponsiveMenuToggle"
@@ -64,4 +64,11 @@
     /// </summary>
     [Parameter]
     public bool IsOpen { get; set; }
+
+    /// <summary>
+    /// Boolean parameter to control visibility of the sidebar toggle button.
+    /// Set to false for layouts without a sidebar (e.g., StackedLayout).
+    /// </summary>
+    [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
 }
