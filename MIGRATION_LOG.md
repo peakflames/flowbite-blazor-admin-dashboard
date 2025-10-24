@@ -2,15 +2,15 @@
 
 **Purpose**: This file is Claude Code's persistent memory. Every Claude Code session MUST read this file first to understand project context, progress, and learnings.
 
-**Last Updated**: 2025-01-24 (Task 1.3 completed)
+**Last Updated**: 2025-01-24 (Task 1.4 completed)
 
 ---
 
 ## Quick Status
 
 - **Current Phase**: Phase 1 - Layout Refinements
-- **Overall Progress**: 3/23 tasks complete (13%)
-- **Phase 1 (Layout)**: 3/5 complete
+- **Overall Progress**: 4/23 tasks complete (17%)
+- **Phase 1 (Layout)**: 4/5 complete
 - **Phase 2 (Settings)**: 0/13 complete
 - **Phase 3 (Playground)**: 0/5 complete
 
@@ -136,12 +136,53 @@
 **Build Status**: ✅ Compiles successfully with no warnings
 
 ### Task 1.4: Dark Mode Consistency
-**Status**: ⬜ Not started
+**Status**: ✅ Complete
 **Description**: Verify dark: classes across all layout components (Navbar, Sidebar, Footer)
 **Files**: All layout components
-**Completion Date**: N/A
-**Issues Found**: N/A
-**Learnings**: N/A
+**Completion Date**: 2025-01-24
+
+**Files Modified**:
+- src/WebApp/Layout/AppNavBar.razor
+- src/WebApp/Layout/MainLayout.razor
+- src/WebApp/Layout/AppFooter.razor
+
+**Issues Found and Fixed**:
+1. **AppNavBar** background: Changed `bg-gray-50` → `bg-white` for consistency
+2. **AppNavBar** border: Changed `dark:border-gray-600` → `dark:border-gray-700` for consistency
+3. **MainLayout** sidebar border: Changed `border-gray-300` → `border-gray-200` for consistency
+4. **AppFooter**: Was empty, fully implemented with dark mode support
+
+**Dark Mode Color Palette Applied**:
+- **Background**: `bg-white dark:bg-gray-800`
+- **Borders**: `border-gray-200 dark:border-gray-700`
+- **Headings**: `text-gray-900 dark:text-white`
+- **Body text**: `text-gray-500 dark:text-gray-400`
+- **Links hover**: `hover:text-gray-900 dark:hover:text-white`
+- **Icons**: `text-gray-500 dark:text-gray-400` with hover states
+
+**AppFooter Implementation**:
+- Responsive 3-column grid (Resources, Follow us, Legal)
+- Social media icons (Facebook, Discord, Twitter, GitHub)
+- Copyright notice with dynamic year
+- All text and interactive elements have dark mode variants
+- Proper semantic HTML with accessibility attributes
+
+**Code Patterns Used**:
+- Consistent Tailwind dark mode class pattern: `light-class dark:dark-class`
+- Border-top for footer separation
+- Responsive grid layout
+- SVG icons with currentColor fill
+- Screen reader text (`sr-only`) for accessibility
+
+**Learnings**:
+1. Dark mode consistency requires systematic color palette application
+2. Gray-800 for dark backgrounds, gray-200/gray-700 for borders
+3. Text hierarchy: gray-900/white (headings), gray-500/gray-400 (body)
+4. Hover states need dark variants for proper visibility
+5. Empty components (AppFooter) should be implemented early to avoid inconsistencies
+6. Social icons benefit from currentColor fill for easy theming
+
+**Build Status**: ✅ Compiles successfully with no warnings
 
 ### Task 1.5: Sidebar Responsive Behavior
 **Status**: ⬜ Not started
