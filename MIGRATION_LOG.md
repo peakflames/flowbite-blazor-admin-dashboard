@@ -2,15 +2,15 @@
 
 **Purpose**: This file is Claude Code's persistent memory. Every Claude Code session MUST read this file first to understand project context, progress, and learnings.
 
-**Last Updated**: 2025-01-24 (Task 1.4 completed)
+**Last Updated**: 2025-01-24 (Phase 1 complete - Task 1.5 completed)
 
 ---
 
 ## Quick Status
 
-- **Current Phase**: Phase 1 - Layout Refinements
-- **Overall Progress**: 4/23 tasks complete (17%)
-- **Phase 1 (Layout)**: 4/5 complete
+- **Current Phase**: Phase 1 - Layout Refinements ✅ COMPLETE
+- **Overall Progress**: 5/23 tasks complete (22%)
+- **Phase 1 (Layout)**: 5/5 complete ✅
 - **Phase 2 (Settings)**: 0/13 complete
 - **Phase 3 (Playground)**: 0/5 complete
 
@@ -185,12 +185,64 @@
 **Build Status**: ✅ Compiles successfully with no warnings
 
 ### Task 1.5: Sidebar Responsive Behavior
-**Status**: ⬜ Not started
+**Status**: ✅ Complete
 **Description**: Mobile overlay behavior, desktop persistent sidebar, smooth transitions
-**Files**: MainLayout.razor, AppSidebar.razor
-**Completion Date**: N/A
-**Code Patterns Used**: N/A
-**Learnings**: N/A
+**Files**: MainLayout.razor
+**Completion Date**: 2025-01-24
+
+**Files Modified**:
+- src/WebApp/Layout/MainLayout.razor
+
+**Implementation Details**:
+Added mobile backdrop overlay that appears when sidebar is open on mobile devices.
+
+**Backdrop Features**:
+- **Positioning**: `fixed inset-0` (covers entire viewport)
+- **Z-index**: `z-30` (below sidebar z-40, above content)
+- **Background**: `bg-gray-900/50` (50% opacity in light mode)
+- **Dark mode**: `dark:bg-gray-900/80` (80% opacity in dark mode)
+- **Responsive**: `lg:hidden` (only shows on mobile/tablet, hidden on desktop)
+- **Interactive**: Click backdrop to close sidebar (onclick handler)
+- **Accessible**: `aria-label="Close sidebar"` for screen readers
+
+**Complete Responsive Behavior**:
+1. **Mobile (< 1024px)**:
+   - Sidebar hidden by default (`-translate-x-full`)
+   - Slides in from left when hamburger menu clicked
+   - Semi-transparent backdrop appears behind sidebar
+   - Click backdrop or navigation link auto-closes sidebar
+   - Smooth transitions via `transition-transform`
+
+2. **Desktop (≥ 1024px)**:
+   - Sidebar always visible (`lg:translate-x-0`)
+   - No backdrop (handled by `lg:hidden`)
+   - Fixed positioning becomes relative (`lg:relative`)
+   - Normal document flow on large screens
+
+**Code Patterns Used**:
+- Conditional rendering with RenderTreeBuilder
+- EventCallback for backdrop click handling
+- Tailwind responsive breakpoints (lg:)
+- Opacity variants for semi-transparent overlays
+- Z-index layering (backdrop z-30, sidebar z-40)
+
+**Sidebar Classes Applied**:
+- `fixed` → `lg:relative`: Positioning strategy per breakpoint
+- `transition-transform`: Smooth slide animations
+- `-translate-x-full`: Hidden off-screen (mobile closed state)
+- `lg:translate-x-0`: Always visible (desktop)
+- `z-40`: Above backdrop and content
+
+**Learnings**:
+1. Backdrop overlay dramatically improves UX on mobile
+2. Z-index layering: backdrop (30) < sidebar (40) prevents click-through
+3. `lg:hidden` on backdrop ensures it only affects mobile experience
+4. Higher opacity in dark mode (80% vs 50%) maintains visibility
+5. `inset-0` shorthand for top-0 right-0 bottom-0 left-0
+6. Backdrop click-to-close is intuitive mobile pattern
+7. RenderTreeBuilder conditional rendering keeps DOM clean
+
+**Build Status**: ✅ Compiles successfully with no warnings
 
 ---
 
