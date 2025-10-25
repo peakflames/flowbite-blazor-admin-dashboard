@@ -2,38 +2,17 @@
 @implements IDisposable
 
 @*
-    LayoutBase.razor
-    Abstract base layout component providing shared functionality for MainLayout and StackedLayout.
-    Handles mobile menu state management and navigation events.
+    LayoutBase.razor - Shared layout base class
+    Provides common functionality (mobile menu state, navigation handling)
+    Derived layouts should NOT call @Body - they inherit this default rendering
 *@
 
-<div class="@GetLayoutClasses()">
-    @LayoutContent
-</div>
+@Body
 
 @code {
-    /// <summary>
-    /// Override in derived classes to provide custom CSS classes for the root layout element.
-    /// </summary>
-    protected virtual string GetLayoutClasses() => "";
-
-    /// <summary>
-    /// Derived classes should set this property in OnInitialized to provide the complete layout structure.
-    /// Default implementation simply renders the Body content.
-    /// </summary>
-    protected RenderFragment LayoutContent { get; set; } = default!;
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        // Subscribe to navigation events
         InitializeNavigation();
-
-        // Default implementation if derived class doesn't set LayoutContent
-        if (LayoutContent == null)
-        {
-            LayoutContent = builder => builder.AddContent(0, Body);
-        }
     }
 }

@@ -1,95 +1,39 @@
 @inherits LayoutBase
 
+<div class="antialiased h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <AppNavBar ResponsiveMenuEnabled="true"
+               OnResponsiveMenuToggle="ToggleMobileMenu"
+               IsOpen="IsMobileMenuOpen" />
+
+    <div class="flex flex-col justify-between flex-auto overflow-y-auto">
+        <section class="flex-auto flex overflow-y-auto">
+
+            @* Mobile backdrop overlay *@
+            @if (IsMobileMenuOpen)
+            {
+                <div class="fixed inset-0 z-30 bg-gray-900/50 dark:bg-gray-900/80 lg:hidden"
+                     @onclick="ToggleMobileMenu"
+                     aria-label="Close sidebar"></div>
+            }
+
+            <aside id="fb-sidebar"
+                   class="z-40 h-full min-w-max fixed lg:relative overflow-auto transition-transform left-0 @(IsMobileMenuOpen ? "" : "-translate-x-full") bg-white border-r border-gray-200 lg:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+                   aria-label="sidenav">
+                <AppSidebar />
+            </aside>
+
+            <main class="p-4 overflow-auto w-full">
+                @Body
+            </main>
+
+        </section>
+
+        <AppFooter />
+    </div>
+</div>
+
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-
-@code {
-    /// <summary>
-    /// Provides custom CSS classes for the root layout container.
-    /// Includes antialiased text, full-screen height, flexbox layout, and dark mode support.
-    /// </summary>
-    protected override string GetLayoutClasses() => "antialiased h-screen flex flex-col bg-gray-50 dark:bg-gray-900";
-
-    /// <summary>
-    /// Initialize the layout content with navbar, sidebar, main content, and footer.
-    /// Uses IsMobileMenuOpen from LayoutBase for responsive sidebar behavior.
-    /// </summary>
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        LayoutContent = builder =>
-        {
-        var sequence = 0;
-
-        // AppNavBar
-        builder.OpenComponent<AppNavBar>(sequence++);
-        builder.AddAttribute(sequence++, "ResponsiveMenuEnabled", true);
-        builder.AddAttribute(sequence++, "OnResponsiveMenuToggle", EventCallback.Factory.Create(this, ToggleMobileMenu));
-        builder.AddAttribute(sequence++, "IsOpen", IsMobileMenuOpen);
-        builder.CloseComponent();
-
-        // Flex container for content + footer
-        builder.OpenElement(sequence++, "div");
-        builder.AddAttribute(sequence++, "class", "flex flex-col justify-between flex-auto overflow-y-auto");
-
-        // Section containing sidebar and main content
-        builder.OpenElement(sequence++, "section");
-        builder.AddAttribute(sequence++, "class", "flex-auto flex overflow-y-auto");
-
-        // Mobile backdrop overlay (only visible when sidebar is open on mobile)
-        if (IsMobileMenuOpen)
-        {
-            builder.OpenElement(sequence++, "div");
-            builder.AddAttribute(sequence++, "class", "fixed inset-0 z-30 bg-gray-900/50 dark:bg-gray-900/80 lg:hidden");
-            builder.AddAttribute(sequence++, "onclick", EventCallback.Factory.Create(this, ToggleMobileMenu));
-            builder.AddAttribute(sequence++, "aria-label", "Close sidebar");
-            builder.CloseElement(); // backdrop div
-        }
-
-        // Sidebar (aside)
-        builder.OpenElement(sequence++, "aside");
-        builder.AddAttribute(sequence++, "id", "fb-sidebar");
-        builder.AddAttribute(sequence++, "class", GetSidebarClasses());
-        builder.AddAttribute(sequence++, "aria-label", "sidenav");
-
-        builder.OpenComponent<AppSidebar>(sequence++);
-        builder.CloseComponent();
-
-        builder.CloseElement(); // aside
-
-        // Main content area
-        builder.OpenElement(sequence++, "main");
-        builder.AddAttribute(sequence++, "class", "p-4 overflow-auto w-full");
-        builder.AddContent(sequence++, Body);
-        builder.CloseElement(); // main
-
-        builder.CloseElement(); // section
-
-        // Footer
-        builder.OpenComponent<AppFooter>(sequence++);
-        builder.CloseComponent();
-
-        builder.CloseElement(); // flex container div
-        };
-    }
-
-    /// <summary>
-    /// Generates CSS classes for the sidebar based on mobile menu open state.
-    /// Sidebar is hidden on mobile when closed, always visible on desktop (lg breakpoint).
-    /// </summary>
-    private string GetSidebarClasses()
-    {
-        var classes = "z-40 h-full min-w-max fixed lg:relative overflow-auto transition-transform left-0 bg-white border-r border-gray-200 lg:translate-x-0 dark:bg-gray-800 dark:border-gray-700";
-
-        if (!IsMobileMenuOpen)
-        {
-            classes += " -translate-x-full";
-        }
-
-        return classes;
-    }
-}
