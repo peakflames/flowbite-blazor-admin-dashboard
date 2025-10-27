@@ -1,0 +1,47 @@
+@using Flowbite.Components
+
+<Card Size="CardSize.ExtraLarge" class="shadow-sm">
+    <div class="flex flex-col items-center pb-6">
+        <Avatar Size="AvatarSize.Large" ImageUrl="@Src" Alt="User avatar" class="mb-3" Rounded="true" />
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <h3 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                @Title
+            </h3>
+        }
+        @if (!string.IsNullOrEmpty(Subtitle))
+        {
+            <span class="text-sm text-gray-500 dark:text-gray-400">@Subtitle</span>
+        }
+
+        <div class="mt-6 w-full">
+            <h3 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                Profile picture
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                JPG, GIF or PNG. Max size of 800K
+            </p>
+        </div>
+
+        @if (ChildContent != null)
+        {
+            <div class="mt-4 w-full">
+                @ChildContent
+            </div>
+        }
+    </div>
+</Card>
+
+@code {
+    [Parameter]
+    public string Src { get; set; } = "";
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Subtitle { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

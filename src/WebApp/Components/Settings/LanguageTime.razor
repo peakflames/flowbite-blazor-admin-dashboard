@@ -1,0 +1,75 @@
+@using Flowbite.Components
+@using WebApp.Domain
+
+<Card Size="CardSize.ExtraLarge" class="shadow-sm">
+    <h3 class="mb-4 text-xl font-semibold">Language & Time</h3>
+    <form>
+        <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="language" Value="Select language" class="mb-2 block" />
+                <Select Id="language" @bind-Value="SelectedLanguage">
+                    @foreach (var lang in Languages)
+                    {
+                        <option value="@lang.Value">@lang.Name</option>
+                    }
+                </Select>
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="timezone" Value="Time Zone" class="mb-2 block" />
+                <Select Id="timezone" @bind-Value="SelectedTimezone">
+                    @foreach (var tz in Timezones)
+                    {
+                        <option value="@tz.Value">@tz.Name</option>
+                    }
+                </Select>
+            </div>
+            @if (ChildContent != null)
+            {
+                <div class="col-span-6">
+                    @ChildContent
+                </div>
+            }
+        </div>
+    </form>
+</Card>
+
+@code {
+    [Parameter]
+    public List<SelectOption> Languages { get; set; } = new()
+    {
+        new() { Name = "English (US)", Value = "en-US" },
+        new() { Name = "Español", Value = "es" },
+        new() { Name = "Français", Value = "fr" },
+        new() { Name = "Deutsch", Value = "de" },
+        new() { Name = "Italiano", Value = "it" },
+        new() { Name = "中文", Value = "zh" },
+        new() { Name = "日本語", Value = "ja" }
+    };
+
+    [Parameter]
+    public List<SelectOption> Timezones { get; set; } = new()
+    {
+        new() { Name = "GMT+0 Greenwich Mean Time (GMT)", Value = "GMT+0" },
+        new() { Name = "GMT+1 Central European Time (CET)", Value = "GMT+1" },
+        new() { Name = "GMT+2 Eastern European Time (EET)", Value = "GMT+2" },
+        new() { Name = "GMT+3 Moscow Time (MSK)", Value = "GMT+3" },
+        new() { Name = "GMT+5 Pakistan Standard Time (PKT)", Value = "GMT+5" },
+        new() { Name = "GMT+8 China Standard Time (CST)", Value = "GMT+8" },
+        new() { Name = "GMT+10 Eastern Australia Standard Time (AEST)", Value = "GMT+10" }
+    };
+
+    [Parameter]
+    public string SelectedLanguage { get; set; } = "en-US";
+
+    [Parameter]
+    public EventCallback<string> SelectedLanguageChanged { get; set; }
+
+    [Parameter]
+    public string SelectedTimezone { get; set; } = "GMT+0";
+
+    [Parameter]
+    public EventCallback<string> SelectedTimezoneChanged { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

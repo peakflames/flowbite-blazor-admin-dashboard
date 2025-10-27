@@ -19,7 +19,7 @@ The project uses a Python build script (`build.py`) that automates all build tas
 ### Primary Commands
 
 ```bash
-# Build the project (default)
+# Build the project (default) (if Linux, use `python3` rather than `python`)
 python build.py
 python build.py build
 

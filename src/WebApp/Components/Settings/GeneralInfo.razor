@@ -1,0 +1,120 @@
+@using Flowbite.Components
+@using WebApp.Domain
+
+<Card Size="CardSize.ExtraLarge" class="shadow-sm">
+    <div class="mb-4">
+        <h3 class="text-xl font-semibold">General information</h3>
+    </div>
+    <EditForm Model="@Model" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="first-name" Value="First Name" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="first-name"
+                          @bind-Value="@Model.FirstName"
+                          Placeholder="Bonnie" />
+                <ValidationMessage For="@(() => Model.FirstName)" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="last-name" Value="Last Name" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="last-name"
+                          @bind-Value="@Model.LastName"
+                          Placeholder="Green" />
+                <ValidationMessage For="@(() => Model.LastName)" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="country" Value="Country" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="country"
+                          @bind-Value="@Model.Country"
+                          Placeholder="United States" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="city" Value="City" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="city"
+                          @bind-Value="@Model.City"
+                          Placeholder="San Francisco" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="address" Value="Address" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="address"
+                          @bind-Value="@Model.Address"
+                          Placeholder="123 Main Street" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="email" Value="Email" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="email"
+                          Type="email"
+                          @bind-Value="@Model.Email"
+                          Placeholder="bonnie.green@company.com" />
+                <ValidationMessage For="@(() => Model.Email)" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="phone" Value="Phone Number" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="phone"
+                          Type="tel"
+                          @bind-Value="@Model.Phone"
+                          Placeholder="+(12) 345 6789" />
+                <ValidationMessage For="@(() => Model.Phone)" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="birthday" Value="Birthday" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="birthday"
+                          Type="date"
+                          @bind-Value="@Model.Birthday"
+                          Placeholder="" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="organization" Value="Organization" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="organization"
+                          @bind-Value="@Model.Organization"
+                          Placeholder="Company Name" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="role" Value="Role" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="role"
+                          @bind-Value="@Model.Role"
+                          Placeholder="Blazor Developer" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="department" Value="Department" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="department"
+                          @bind-Value="@Model.Department"
+                          Placeholder="Development" />
+            </div>
+            <div class="col-span-6 sm:col-span-3">
+                <Label For="zip" Value="Zip/postal code" class="mb-2 block" />
+                <TextInput TValue="string"
+                          Id="zip"
+                          @bind-Value="@Model.ZipCode"
+                          Placeholder="123456" />
+            </div>
+            <div class="col-span-6 sm:col-full">
+                <Button Type="ButtonType.Submit">Save all</Button>
+            </div>
+        </div>
+    </EditForm>
+</Card>
+
+@code {
+    [Parameter]
+    public UserSettings Model { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<UserSettings> OnSubmit { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        await OnSubmit.InvokeAsync(Model);
+    }
+}
