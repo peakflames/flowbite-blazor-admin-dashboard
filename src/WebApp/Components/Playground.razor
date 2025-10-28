@@ -1,0 +1,38 @@
+@using Flowbite.Components
+@using WebApp.Components
+
+<main>
+    <div class="grid grid-cols-1 pt-2 xl:grid-cols-3 xl:gap-4 xl:px-0 dark:bg-gray-900">
+        <div class="col-span-full mb-4 xl:mb-2">
+            @if (Breadcrumb != null)
+            {
+                @Breadcrumb
+            }
+            <Heading Tag="HeadingTag.H1" class="text-xl font-semibold sm:text-2xl">
+                @Title
+            </Heading>
+        </div>
+        <div class="col-span-full xl:col-auto">
+            <EmptyCard Class="mb-4 h-80 w-full space-y-6 p-4" />
+            <EmptyCard Class="mb-4 h-80 w-full space-y-6 p-4" />
+        </div>
+        <div class="col-span-2">
+            <EmptyCard Class="mb-4 h-80 max-w-none space-y-6 p-4" />
+            <EmptyCard Class="mb-4 h-80 w-full max-w-none space-y-6 p-4" />
+        </div>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        @for (int i = 0; i < 4; i++)
+        {
+            <EmptyCard Class="h-60 w-full space-y-6 sm:p-6" />
+        }
+    </div>
+</main>
+
+@code {
+    [Parameter]
+    public RenderFragment? Breadcrumb { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Create something awesome here";
+}
