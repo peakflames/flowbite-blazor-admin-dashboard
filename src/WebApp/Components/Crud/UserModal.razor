@@ -1,0 +1,198 @@
+@using Flowbite.Components
+@using WebApp.Domain
+@using System.ComponentModel.DataAnnotations
+
+<Modal Show="Open" ShowChanged="HandleShowChanged" Size="ModalSize.Medium">
+    <ModalHeader>
+        @(User?.Id > 0 ? "Edit user" : "Add new user")
+    </ModalHeader>
+
+    <ModalBody>
+        <EditForm Model="@FormModel" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="grid grid-cols-6 gap-6">
+                <!-- First Name -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="first-name">First Name</Label>
+                    <TextInput Id="first-name"
+                              @bind-Value="FormModel.FirstName"
+                              Placeholder="e.g. Bonnie"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.FirstName)" />
+                </div>
+
+                <!-- Last Name -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="last-name">Last Name</Label>
+                    <TextInput Id="last-name"
+                              @bind-Value="FormModel.LastName"
+                              Placeholder="e.g. Green"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.LastName)" />
+                </div>
+
+                <!-- Email -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="email">Email</Label>
+                    <TextInput Id="email"
+                              Type="email"
+                              @bind-Value="FormModel.Email"
+                              Placeholder="e.g. bonnie@flowbite.com"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.Email)" />
+                </div>
+
+                <!-- Position -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="position">Position</Label>
+                    <TextInput Id="position"
+                              @bind-Value="FormModel.Position"
+                              Placeholder="e.g. React Developer"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.Position)" />
+                </div>
+
+                <!-- Current Password -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="current-password">Current Password</Label>
+                    <TextInput Id="current-password"
+                              Type="password"
+                              @bind-Value="FormModel.CurrentPassword"
+                              Placeholder="••••••••"
+                              Class="border outline-none" />
+                </div>
+
+                <!-- New Password -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="new-password">New Password</Label>
+                    <TextInput Id="new-password"
+                              Type="password"
+                              @bind-Value="FormModel.NewPassword"
+                              Placeholder="••••••••"
+                              Class="border outline-none" />
+                </div>
+
+                <!-- Biography -->
+                <div class="col-span-6 space-y-2">
+                    <Label For="biography">Biography</Label>
+                    <Textarea Id="biography"
+                             @bind-Value="FormModel.Biography"
+                             Rows="4"
+                             Placeholder="👨‍💻Full-stack web developer. Open-source contributor."
+                             Class="w-full bg-gray-50 outline-none dark:bg-gray-700" />
+                    <ValidationMessage For="@(() => FormModel.Biography)" />
+                </div>
+            </div>
+
+            <ModalFooter>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">
+                    @(User?.Id > 0 ? "Save all" : "Add user")
+                </Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalBody>
+</Modal>
+
+@code {
+    /// <summary>
+    /// Controls whether the modal is open or closed (two-way binding).
+    /// </summary>
+    [Parameter]
+    public bool Open { get; set; }
+
+    /// <summary>
+    /// Event callback when Open changes (for two-way binding).
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OpenChanged { get; set; }
+
+    /// <summary>
+    /// The user to edit, or null for adding a new user.
+    /// </summary>
+    [Parameter]
+    public User? User { get; set; }
+
+    /// <summary>
+    /// Event callback when user is saved.
+    /// </summary>
+    [Parameter]
+    public EventCallback<User> OnSave { get; set; }
+
+    private UserFormModel FormModel { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        // Populate form when user changes
+        if (User != null && User.Id > 0)
+        {
+            FormModel = new UserFormModel
+            {
+                FirstName = User.FirstName,
+                LastName = User.LastName,
+                Email = User.Email,
+                Position = User.Position,
+                Biography = User.Biography,
+                CurrentPassword = "",
+                NewPassword = ""
+            };
+        }
+        else
+        {
+            FormModel = new UserFormModel();
+        }
+    }
+
+    private async Task HandleShowChanged(bool value)
+    {
+        Open = value;
+        await OpenChanged.InvokeAsync(value);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Create or update user from form data
+        var user = User ?? new User();
+        user.FirstName = FormModel.FirstName;
+        user.LastName = FormModel.LastName;
+        user.Email = FormModel.Email;
+        user.Position = FormModel.Position;
+        user.Biography = FormModel.Biography;
+
+        // Close modal
+        Open = false;
+        await OpenChanged.InvokeAsync(Open);
+
+        // Notify parent
+        await OnSave.InvokeAsync(user);
+    }
+
+    /// <summary>
+    /// Form model for user editing with validation.
+    /// </summary>
+    private class UserFormModel
+    {
+        [Required(ErrorMessage = "First name is required")]
+        public string FirstName { get; set; } = "";
+
+        [Required(ErrorMessage = "Last name is required")]
+        public string LastName { get; set; } = "";
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string Email { get; set; } = "";
+
+        [Required(ErrorMessage = "Position is required")]
+        public string Position { get; set; } = "";
+
+        public string Biography { get; set; } = "";
+
+        public string CurrentPassword { get; set; } = "";
+
+        public string NewPassword { get; set; } = "";
+    }
+}

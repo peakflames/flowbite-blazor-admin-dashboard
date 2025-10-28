@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Avatar images should crop to fit their fixed size container */
+img.relative.inline-block.rounded-full {
+    object-fit: cover;
+}
+
 
 /* Microsoft Blazor  ------------------------------------------------------------------------------------------------------------------ */
 .valid.modified:not([type=checkbox]) {

@@ -1,0 +1,260 @@
+@page "/crud/users"
+@using Flowbite.Components
+@using Flowbite.Icons
+@using WebApp.Domain
+@using WebApp.Components.Crud
+@using System.Text.Json
+@inject HttpClient Http
+
+<main class="relative h-full w-full overflow-y-auto bg-white dark:bg-gray-800">
+    <h1 class="hidden">CRUD: Users</h1>
+
+    <div class="p-4">
+        <!-- Breadcrumb -->
+        <Breadcrumb Class="mb-5">
+            <BreadcrumbItem Href="/">Home</BreadcrumbItem>
+            <BreadcrumbItem Href="/crud/users">Users</BreadcrumbItem>
+            <BreadcrumbItem>List</BreadcrumbItem>
+        </Breadcrumb>
+
+        <!-- Page Heading -->
+        <Heading Tag="HeadingTag.H1" Class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+            All users
+        </Heading>
+
+        <!-- Toolbar -->
+        <div class="w-full py-4 text-gray-500 dark:text-gray-300">
+            <div class="flex flex-wrap items-center justify-between">
+                <!-- Search Input -->
+                <div class="flex items-center space-x-2">
+                    <TextInput @bind-Value="SearchQuery"
+                              Placeholder="Search for users"
+                              Class="me-4 w-80 border xl:w-96" />
+
+                    <!-- Action Buttons -->
+                    <div class="border-l border-gray-100 pl-2 dark:border-gray-700 flex items-center space-x-1">
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <CogOutlineIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <TrashBinOutlineIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <ExclamationCircleOutlineIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <DotsVerticalOutlineIcon Size="IconSize.Large" />
+                        </Button>
+                    </div>
+                </div>
+
+                <!-- Add/Export Buttons -->
+                <div class="flex items-center space-x-2">
+                    <Button Size="ButtonSize.Small"
+                            Class="gap-2 px-3 whitespace-nowrap"
+                            OnClick="@(() => OpenAddUserModal())">
+                        <PlusOutlineIcon Size="IconSize.Small" />
+                        Add user
+                    </Button>
+                    <Button Size="ButtonSize.Small"
+                            Color="ButtonColor.Light"
+                            Class="gap-2 px-3">
+                        <DownloadOutlineIcon Size="IconSize.Medium" Class="-ml-1" />
+                        Export
+                    </Button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="overflow-x-auto">
+        <Table>
+            <TableHead class="border-y border-gray-200 bg-gray-100 dark:border-gray-700">
+            <TableRow>
+                <TableHeadCell class="w-4 p-4">
+                    <Checkbox />
+                </TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Name</TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Biography</TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Position</TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Country</TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Status</TableHeadCell>
+                <TableHeadCell class="p-4 font-medium">Actions</TableHeadCell>
+            </TableRow>
+        </TableHead>
+        <TableBody class="divide-y">
+            @foreach (var user in FilteredUsers)
+            {
+                <TableRow class="text-base">
+                    <TableCell class="w-4 p-4">
+                        <Checkbox />
+                    </TableCell>
+                    <TableCell class="mr-12 flex items-center space-x-6 p-4 whitespace-nowrap">
+                        <Avatar ImageUrl="@GetAvatarUrl(user.Avatar)" Rounded="true" Alt="@user.Name" />
+                        <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
+                            <div class="text-base font-semibold text-gray-900 dark:text-white">
+                                @user.Name
+                            </div>
+                            <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
+                                @user.Email
+                            </div>
+                        </div>
+                    </TableCell>
+                    <TableCell class="max-w-sm truncate overflow-hidden p-4 text-base font-normal text-gray-500 xl:max-w-xs dark:text-gray-300">
+                        @user.Biography
+                    </TableCell>
+                    <TableCell class="p-4">
+                        @user.Position
+                    </TableCell>
+                    <TableCell class="p-4">
+                        @user.Country
+                    </TableCell>
+                    <TableCell class="p-4 font-normal">
+                        <div class="flex items-center gap-2">
+                            <div class="@(user.Status == "Active" ? "h-2.5 w-2.5 rounded-full bg-green-500" : "h-2.5 w-2.5 rounded-full bg-red-500")"></div>
+                            @user.Status
+                        </div>
+                    </TableCell>
+                    <TableCell class="space-x-2 whitespace-nowrap p-4">
+                        <Button Size="ButtonSize.Small"
+                                Class="gap-2 px-3"
+                                OnClick="@(() => OpenEditUserModal(user))">
+                            <EditOutlineIcon Size="IconSize.Small" />
+                            Edit user
+                        </Button>
+                        <Button Color="ButtonColor.Red"
+                                Size="ButtonSize.Small"
+                                Class="gap-2 px-3"
+                                OnClick="@(() => OpenDeleteConfirmation(user))">
+                            <TrashBinSolidIcon Size="IconSize.Small" />
+                            Delete user
+                        </Button>
+                    </TableCell>
+                </TableRow>
+            }
+        </TableBody>
+    </Table>
+    </div>
+</main>
+
+<!-- Modals -->
+<UserModal @bind-Open="IsUserModalOpen"
+          User="@CurrentUser"
+          OnSave="@HandleUserSave" />
+
+<DeleteModal @bind-Open="IsDeleteModalOpen"
+            Title="Are you sure you want to delete this user?"
+            OnConfirm="@HandleDeleteConfirm"
+            OnCancel="@HandleDeleteCancel" />
+
+@code {
+    private List<User> UsersList { get; set; } = new();
+    private string SearchQuery { get; set; } = "";
+    private bool IsUserModalOpen { get; set; }
+    private bool IsDeleteModalOpen { get; set; }
+    private User? CurrentUser { get; set; }
+    private User? UserToDelete { get; set; }
+
+    private List<User> FilteredUsers =>
+        string.IsNullOrWhiteSpace(SearchQuery)
+            ? UsersList
+            : UsersList.Where(u =>
+                u.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                u.Email.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                u.Position.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                u.Country.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUsers();
+    }
+
+    private async Task LoadUsers()
+    {
+        try
+        {
+            var json = await Http.GetStringAsync("data/users.json");
+            UsersList = JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<User>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading users: {ex.Message}");
+            UsersList = new List<User>();
+        }
+    }
+
+    private void OpenAddUserModal()
+    {
+        CurrentUser = new User { Id = 0 };
+        IsUserModalOpen = true;
+    }
+
+    private void OpenEditUserModal(User user)
+    {
+        CurrentUser = user;
+        IsUserModalOpen = true;
+    }
+
+    private void OpenDeleteConfirmation(User user)
+    {
+        UserToDelete = user;
+        IsDeleteModalOpen = true;
+    }
+
+    private async Task HandleUserSave(User user)
+    {
+        if (user.Id == 0)
+        {
+            // Add new user
+            user.Id = UsersList.Any() ? UsersList.Max(u => u.Id) + 1 : 1;
+            user.Avatar = "bonnie-green.png"; // Default avatar
+            user.Status = "Active";
+            user.Country = "United States"; // Default country
+            UsersList.Add(user);
+        }
+        else
+        {
+            // Update existing user
+            var existingUser = UsersList.FirstOrDefault(u => u.Id == user.Id);
+            if (existingUser != null)
+            {
+                existingUser.Name = user.Name;
+                existingUser.Email = user.Email;
+                existingUser.Position = user.Position;
+                existingUser.Biography = user.Biography;
+            }
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private async Task HandleDeleteConfirm()
+    {
+        if (UserToDelete != null)
+        {
+            UsersList.Remove(UserToDelete);
+            UserToDelete = null;
+        }
+        await Task.CompletedTask;
+    }
+
+    private async Task HandleDeleteCancel()
+    {
+        UserToDelete = null;
+        await Task.CompletedTask;
+    }
+
+    private string GetAvatarUrl(string avatar)
+    {
+        return $"https://flowbite-admin-dashboard.vercel.app/images/users/{avatar}";
+    }
+}
