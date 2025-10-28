@@ -508,3 +508,4 @@ dotnet-install.sh
 
 
 src/WebApp/tools/tailwindcss
+.playwright-mcp/

@@ -1,0 +1,16 @@
+@page "/playground/stacked"
+@layout StackedLayout
+@using WebApp.Components
+@using Flowbite.Components
+
+<div id="main-content" class="relative mx-auto h-full w-full max-w-screen-2xl overflow-y-auto bg-gray-50 p-4 dark:bg-gray-900">
+    <Playground Title="Create something awesome here">
+        <Breadcrumb>
+            <Breadcrumb class="mb-5">
+                <BreadcrumbItem Href="/">Home</BreadcrumbItem>
+                <BreadcrumbItem Href="/playground">Playground</BreadcrumbItem>
+                <BreadcrumbItem>Stacked</BreadcrumbItem>
+            </Breadcrumb>
+        </Breadcrumb>
+    </Playground>
+</div>

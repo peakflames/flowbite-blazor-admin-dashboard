@@ -190,14 +190,14 @@ def run_dotnet_command(dotnet_path: str, command: str) -> None:
             print("Starting project with hot reload...")
             print("Press Ctrl+C to stop watching...")
             subprocess.run(
-                [dotnet_path, "watch", "--project", PROJECT_PATH]
+                [dotnet_path, "watch", "--project", PROJECT_PATH, "--no-restore"]
             )
         
         elif command == "run":
             print("Running project...")
             print("Press Ctrl+C to stop...")
             subprocess.run(
-                [dotnet_path, "run", "--project", PROJECT_PATH]
+                [dotnet_path, "run", "--project", PROJECT_PATH, "--no-restore"]
             )
         
         elif command == "build":

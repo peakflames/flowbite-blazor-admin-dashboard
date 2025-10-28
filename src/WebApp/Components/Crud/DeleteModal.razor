@@ -1,0 +1,87 @@
+@using Flowbite.Components
+@using Flowbite.Icons
+
+<Modal Show="Open" ShowChanged="HandleShowChanged" Size="ModalSize.Small">
+    <ModalBody>
+        <div class="text-center">
+            <ExclamationCircleOutlineIcon Size="IconSize.ExtraLarge" Class="mx-auto mb-4 h-10 w-10 text-red-600 dark:text-red-500" />
+
+            <h3 class="mb-6 text-lg text-gray-500 dark:text-gray-300">
+                @Title
+            </h3>
+
+            <div class="flex items-center justify-center gap-2">
+                <Button Color="ButtonColor.Red" OnClick="HandleConfirm">
+                    @YesText
+                </Button>
+                <Button Color="ButtonColor.Light" OnClick="HandleCancel">
+                    @NoText
+                </Button>
+            </div>
+        </div>
+    </ModalBody>
+</Modal>
+
+@code {
+    /// <summary>
+    /// Controls whether the modal is open or closed (two-way binding).
+    /// </summary>
+    [Parameter]
+    public bool Open { get; set; }
+
+    /// <summary>
+    /// Event callback when Open changes (for two-way binding).
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OpenChanged { get; set; }
+
+    private async Task HandleShowChanged(bool value)
+    {
+        Open = value;
+        await OpenChanged.InvokeAsync(value);
+    }
+
+    /// <summary>
+    /// The confirmation message to display.
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "Are you sure you want to delete this?";
+
+    /// <summary>
+    /// Text for the confirmation button.
+    /// </summary>
+    [Parameter]
+    public string YesText { get; set; } = "Yes, I'm sure";
+
+    /// <summary>
+    /// Text for the cancel button.
+    /// </summary>
+    [Parameter]
+    public string NoText { get; set; } = "No, cancel";
+
+    /// <summary>
+    /// Event callback when user confirms deletion.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    /// <summary>
+    /// Event callback when user cancels deletion.
+    /// </summary>
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    private async Task HandleConfirm()
+    {
+        Open = false;
+        await OpenChanged.InvokeAsync(Open);
+        await OnConfirm.InvokeAsync();
+    }
+
+    private async Task HandleCancel()
+    {
+        Open = false;
+        await OpenChanged.InvokeAsync(Open);
+        await OnCancel.InvokeAsync();
+    }
+}

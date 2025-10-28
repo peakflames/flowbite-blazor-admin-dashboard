@@ -1,0 +1,18 @@
+@inherits LayoutComponentBase
+@implements IDisposable
+
+@*
+    LayoutBase.razor - Shared layout base class
+    Provides common functionality (mobile menu state, navigation handling)
+    Derived layouts should NOT call @Body - they inherit this default rendering
+*@
+
+@Body
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        InitializeNavigation();
+    }
+}

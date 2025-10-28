@@ -1,13 +1,13 @@
 ﻿@inherits FlowbiteComponentBase
 
 <!-- Header (begin) -->
-<header class="z-40 w-full mx-auto bg-gray-50 border-b border-gray-200 dark:border-gray-600 dark:bg-gray-800">
+<header class="z-40 w-full mx-auto bg-white border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
     <div class="px-2 py-2.5 flex flex-wrap justify-between items-center" >
 
         <!-- Left-Side Component Group -->
         <div class="flex justify-start items-center">
 
-            @if (ResponsiveMenuEnabled)
+            @if (ResponsiveMenuEnabled && ShowSidebarToggle)
             {
                 <button id="responsive-menu-toggle"
                     @onclick="OnResponsiveMenuToggle"
@@ -64,4 +64,11 @@
     /// </summary>
     [Parameter]
     public bool IsOpen { get; set; }
+
+    /// <summary>
+    /// Boolean parameter to control visibility of the sidebar toggle button.
+    /// Set to false for layouts without a sidebar (e.g., StackedLayout).
+    /// </summary>
+    [Parameter]
+    public bool ShowSidebarToggle { get; set; } = true;
 }

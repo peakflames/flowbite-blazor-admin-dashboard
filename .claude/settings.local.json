@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python build.py build:*)",
+      "Bash(python3 build.py:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_install",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_evaluate",
+      "Bash(lsof:*)",
+      "Bash(xargs kill -9)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_click"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,24 @@
+@inherits LayoutBase
+
+@*
+    StackedLayout.razor
+    Full-width layout variant without sidebar for pages like Playground.
+    Provides maximum content area with centered, constrained width container.
+*@
+
+<div class="antialiased bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <AppNavBar ResponsiveMenuEnabled="false"
+               ShowSidebarToggle="false" />
+
+    <main class="p-4 h-auto pt-20 max-w-screen-2xl mx-auto">
+        @Body
+    </main>
+
+    <AppFooter />
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>

@@ -1,0 +1,45 @@
+@using Flowbite.Components
+@using WebApp.Domain
+
+<Card Size="CardSize.ExtraLarge" class="shadow-sm">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <h3 class="mb-4 text-xl font-semibold">@Title</h3>
+    }
+    <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+        @foreach (var user in Users)
+        {
+            <li class="flex items-center justify-between py-4">
+                <div class="flex items-center gap-4">
+                    <Avatar Size="AvatarSize.Medium"
+                           ImageUrl="@user.Avatar"
+                           Alt="@user.Name"
+                           Rounded="true" />
+                    <div>
+                        <div class="font-semibold text-gray-900 dark:text-white">
+                            @user.Name
+                        </div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                            @user.Country
+                        </div>
+                    </div>
+                </div>
+                @if (ChildContent != null)
+                {
+                    @ChildContent(user)
+                }
+            </li>
+        }
+    </ul>
+</Card>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public List<UserAccount> Users { get; set; } = new();
+
+    [Parameter]
+    public RenderFragment<UserAccount>? ChildContent { get; set; }
+}

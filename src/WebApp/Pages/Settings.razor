@@ -1,0 +1,169 @@
+@page "/settings"
+@using Flowbite.Components
+@using WebApp.Components.Settings
+@using WebApp.Domain
+@using WebApp.Services
+@inject SettingsService SettingsService
+@implements IDisposable
+
+<div class="grid grid-cols-1 px-4 pt-6 dark:bg-gray-900">
+    <div class="mb-4">
+        <Breadcrumb class="mb-5">
+            <BreadcrumbItem Href="/">Home</BreadcrumbItem>
+            <BreadcrumbItem Href="/settings">Settings</BreadcrumbItem>
+        </Breadcrumb>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+            User settings
+        </h1>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-4">
+        @* Left Column *@
+        <div class="space-y-4 xl:col-auto">
+            <UserProfile Src="@_userAvatar"
+                        Title="@($"{_settings.FirstName} {_settings.LastName}")"
+                        Subtitle="@_settings.Email" />
+
+            <LanguageTime @bind-SelectedLanguage="_selectedLanguage"
+                         @bind-SelectedTimezone="_selectedTimezone" />
+
+            <SocialAccounts Accounts="@_socialAccounts"
+                           OnToggle="@HandleSocialToggle"
+                           OnSaveAll="@HandleSocialSaveAll" />
+
+            <Accounts Title="Other accounts"
+                     Users="@_userAccounts">
+                <ChildContent Context="user">
+                    <Button Color="ButtonColor.Light" Size="ButtonSize.Small">
+                        View
+                    </Button>
+                </ChildContent>
+            </Accounts>
+        </div>
+
+        @* Right Column *@
+        <div class="space-y-4 xl:col-span-2">
+            <GeneralInfo Model="@_settings"
+                        OnSubmit="@HandleSettingsSave" />
+
+            <PasswordInfo OnSubmit="@HandlePasswordChange" />
+
+            <Sessions SessionList="@_sessions"
+                     SeeMoreHref="/settings/sessions"
+                     OnRevoke="@HandleSessionRevoke" />
+        </div>
+    </div>
+
+    @* Full Width - Notification Cards *@
+    <div class="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2 xl:gap-4">
+        <NotificationCard Title="Email notifications"
+                         Subtitle="Select the types of email notifications you'd like to receive"
+                         Items="@_emailNotifications"
+                         OnToggleChanged="@HandleNotificationToggle"
+                         OnSaveAll="@HandleEmailNotificationsSave" />
+
+        <NotificationCard Title="Push notifications"
+                         Subtitle="Select the types of push notifications you'd like to receive"
+                         Items="@_pushNotifications"
+                         OnToggleChanged="@HandleNotificationToggle"
+                         OnSaveAll="@HandlePushNotificationsSave" />
+    </div>
+</div>
+
+@code {
+    private UserSettings _settings = new();
+    private List<SocialAccount> _socialAccounts = new();
+    private List<UserAccount> _userAccounts = new();
+    private List<SessionInfo> _sessions = new();
+    private List<NotificationItem> _emailNotifications = new();
+    private List<NotificationItem> _pushNotifications = new();
+
+    private string _selectedLanguage = "en-US";
+    private string _selectedTimezone = "GMT+0";
+    private string _userAvatar = "https://flowbite-admin-dashboard.vercel.app/images/users/bonnie-green.png";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Subscribe to service state changes
+        SettingsService.OnChange += StateHasChanged;
+
+        // Load data from service
+        _settings = SettingsService.Settings;
+        _sessions = SettingsService.Sessions;
+
+        _socialAccounts = await SettingsService.GetSocialAccountsAsync();
+        _userAccounts = await SettingsService.GetUserAccountsAsync();
+
+        // Initialize notification preferences
+        _emailNotifications = new List<NotificationItem>
+        {
+            new() { Title = "Rating reminders", Subtitle = "Send an email reminding me to rate an item a week after purchase", Active = true },
+            new() { Title = "Item update notifications", Subtitle = "Send user and product notifications for you", Active = false },
+            new() { Title = "Item comment notifications", Subtitle = "Send me an email when someone comments on one of my items", Active = true },
+            new() { Title = "Buyer review notifications", Subtitle = "Send me an email when someone leaves a review with their rating", Active = false }
+        };
+
+        _pushNotifications = new List<NotificationItem>
+        {
+            new() { Title = "Company News", Subtitle = "Get Themesberg news, announcements, and product updates", Active = false },
+            new() { Title = "Account Activity", Subtitle = "Get important notifications about you or activity you've missed", Active = true },
+            new() { Title = "Meetups Near You", Subtitle = "Get an email when a Dribbble Meetup is posted close to my location", Active = true },
+            new() { Title = "New Messages", Subtitle = "Get Themesberg news, announcements, and product updates", Active = false }
+        };
+    }
+
+    private async Task HandleSettingsSave(UserSettings settings)
+    {
+        await SettingsService.SaveSettingsAsync(settings);
+        // TODO: Show success toast notification
+    }
+
+    private async Task HandlePasswordChange(PasswordInfo.PasswordChangeModel model)
+    {
+        // TODO: Implement password change logic
+        await Task.Delay(100);
+        // TODO: Show success toast
+    }
+
+    private async Task HandleSocialToggle(SocialAccount account)
+    {
+        await SettingsService.ToggleSocialAccountAsync(account);
+    }
+
+    private async Task HandleSocialSaveAll()
+    {
+        // Save all social account changes
+        await Task.Delay(100);
+        // TODO: Show success toast notification
+    }
+
+    private async Task HandleSessionRevoke(SessionInfo session)
+    {
+        await SettingsService.RevokeSessionAsync(session);
+    }
+
+    private void HandleNotificationToggle(NotificationItem item)
+    {
+        SettingsService.UpdateNotification(item);
+    }
+
+    private async Task HandleEmailNotificationsSave()
+    {
+        // Save all email notification preferences
+        await Task.Delay(100);
+        // TODO: Show success toast notification
+    }
+
+    private async Task HandlePushNotificationsSave()
+    {
+        // Save all push notification preferences
+        await Task.Delay(100);
+        // TODO: Show success toast notification
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from service events
+        SettingsService.OnChange -= StateHasChanged;
+    }
+}
