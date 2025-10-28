@@ -1,0 +1,213 @@
+@using Flowbite.Components
+@using WebApp.Domain
+@using System.ComponentModel.DataAnnotations
+
+<Modal Show="Open" ShowChanged="HandleShowChanged" Size="ModalSize.ExtraLarge">
+    <ModalHeader>
+        @(Product?.Id > 0 ? "Update Product" : "Add new product")
+    </ModalHeader>
+
+    <ModalBody>
+        <EditForm Model="@FormModel" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="grid grid-cols-6 gap-6">
+                <!-- Product Name -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="product-name">Product Name</Label>
+                    <TextInput Id="product-name"
+                              @bind-Value="FormModel.Name"
+                              Placeholder="Type product name"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.Name)" />
+                </div>
+
+                <!-- Category -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="category">Category</Label>
+                    <Select Id="category"
+                            @bind-Value="FormModel.Category"
+                            Class="border outline-none">
+                        <option value="">Select category</option>
+                        <option value="Html templates">HTML Templates</option>
+                        <option value="UI Kit">UI Kit</option>
+                        <option value="Dashboard">Dashboard</option>
+                        <option value="Component Library">Component Library</option>
+                    </Select>
+                    <ValidationMessage For="@(() => FormModel.Category)" />
+                </div>
+
+                <!-- Technology/Brand -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="technology">Technology/Brand</Label>
+                    <Select Id="technology"
+                            @bind-Value="FormModel.Technology"
+                            Class="border outline-none">
+                        <option value="">Select technology</option>
+                        <option value="Angular">Angular</option>
+                        <option value="React JS">React JS</option>
+                        <option value="Svelte">Svelte</option>
+                        <option value="Vue">Vue</option>
+                    </Select>
+                    <ValidationMessage For="@(() => FormModel.Technology)" />
+                </div>
+
+                <!-- Price -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="price">Price</Label>
+                    <TextInput Id="price"
+                              @bind-Value="FormModel.Price"
+                              Placeholder="$149"
+                              Required="true"
+                              Class="border outline-none" />
+                    <ValidationMessage For="@(() => FormModel.Price)" />
+                </div>
+
+                <!-- Discount -->
+                <div class="col-span-6 sm:col-span-3 space-y-2">
+                    <Label For="discount">Discount</Label>
+                    <Select Id="discount"
+                            @bind-Value="FormModel.Discount"
+                            Class="border outline-none">
+                        <option value="No">No Discount</option>
+                        <option value="5%">5% Off</option>
+                        <option value="10%">10% Off</option>
+                        <option value="15%">15% Off</option>
+                        <option value="20%">20% Off</option>
+                        <option value="25%">25% Off</option>
+                        <option value="30%">30% Off</option>
+                        <option value="50%">50% Off</option>
+                    </Select>
+                    <ValidationMessage For="@(() => FormModel.Discount)" />
+                </div>
+
+                <!-- Product ID (readonly for edit) -->
+                @if (Product?.Id > 0)
+                {
+                    <div class="col-span-6 sm:col-span-3 space-y-2">
+                        <Label For="product-id">Product ID</Label>
+                        <TextInput Id="product-id"
+                                  Value="@Product.Id.ToString()"
+                                  Disabled="true"
+                                  Class="border outline-none bg-gray-100 dark:bg-gray-700" />
+                    </div>
+                }
+
+                <!-- Description -->
+                <div class="col-span-6 space-y-2">
+                    <Label For="description">Product Description</Label>
+                    <Textarea Id="description"
+                             @bind-Value="FormModel.Description"
+                             Rows="4"
+                             Placeholder="Write product description here"
+                             Class="w-full bg-gray-50 outline-none dark:bg-gray-700" />
+                    <ValidationMessage For="@(() => FormModel.Description)" />
+                </div>
+            </div>
+
+            <ModalFooter>
+                <Button Type="ButtonType.Submit" Color="ButtonColor.Primary">
+                    @(Product?.Id > 0 ? "Update product" : "Add product")
+                </Button>
+            </ModalFooter>
+        </EditForm>
+    </ModalBody>
+</Modal>
+
+@code {
+    /// <summary>
+    /// Controls whether the modal is open or closed (two-way binding).
+    /// </summary>
+    [Parameter]
+    public bool Open { get; set; }
+
+    /// <summary>
+    /// Event callback when Open changes (for two-way binding).
+    /// </summary>
+    [Parameter]
+    public EventCallback<bool> OpenChanged { get; set; }
+
+    /// <summary>
+    /// The product to edit, or null for adding a new product.
+    /// </summary>
+    [Parameter]
+    public Product? Product { get; set; }
+
+    /// <summary>
+    /// Event callback when product is saved.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Product> OnSave { get; set; }
+
+    private ProductFormModel FormModel { get; set; } = new();
+
+    protected override void OnParametersSet()
+    {
+        // Populate form when product changes
+        if (Product != null && Product.Id > 0)
+        {
+            FormModel = new ProductFormModel
+            {
+                Name = Product.Name,
+                Category = Product.Category,
+                Technology = Product.Technology,
+                Description = Product.Description,
+                Price = Product.Price,
+                Discount = Product.Discount
+            };
+        }
+        else
+        {
+            FormModel = new ProductFormModel();
+        }
+    }
+
+    private async Task HandleShowChanged(bool value)
+    {
+        Open = value;
+        await OpenChanged.InvokeAsync(value);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Create or update product from form data
+        var product = Product ?? new Product();
+        product.Name = FormModel.Name;
+        product.Category = FormModel.Category;
+        product.Technology = FormModel.Technology;
+        product.Description = FormModel.Description;
+        product.Price = FormModel.Price;
+        product.Discount = FormModel.Discount;
+
+        // Close modal
+        Open = false;
+        await OpenChanged.InvokeAsync(Open);
+
+        // Notify parent
+        await OnSave.InvokeAsync(product);
+    }
+
+    /// <summary>
+    /// Form model for product editing with validation.
+    /// </summary>
+    private class ProductFormModel
+    {
+        [Required(ErrorMessage = "Product name is required")]
+        public string Name { get; set; } = "";
+
+        [Required(ErrorMessage = "Category is required")]
+        public string Category { get; set; } = "";
+
+        [Required(ErrorMessage = "Technology/Brand is required")]
+        public string Technology { get; set; } = "";
+
+        [Required(ErrorMessage = "Description is required")]
+        public string Description { get; set; } = "";
+
+        [Required(ErrorMessage = "Price is required")]
+        public string Price { get; set; } = "";
+
+        public string Discount { get; set; } = "No";
+    }
+}
