@@ -62,6 +62,35 @@ python build.py publish
 dotnet serve -d dist/wwwroot -p 8080
 ```
 
+## ⚠️ CRITICAL: Tailwind CSS Version Management
+
+**ABSOLUTE RULE**: The Tailwind CSS executable at `src/WebApp/tools/tailwindcss` must **NEVER** be updated, replaced, or modified unless the user **EXPLICITLY** requests it.
+
+### Why This Rule Exists
+
+The project requires **Tailwind CSS v3.4.15 exactly**. Using the wrong version (especially v4.x alpha) causes:
+- Sidebar invisibility in wide view
+- Missing responsive classes (`lg:translate-x-0`, `lg:relative`)
+- Severely truncated CSS output
+- Layout breaking issues
+
+### What NOT to Do
+
+❌ **NEVER** download or update the Tailwind CSS executable
+❌ **NEVER** run commands that might replace `src/WebApp/tools/tailwindcss`
+❌ **NEVER** "upgrade to latest version"
+❌ **NEVER** modify anything in `src/WebApp/tools/` directory
+❌ **NEVER** do any of the above even when working autonomously
+
+### What to Do
+
+✅ **ALWAYS** use the existing Tailwind CSS executable
+✅ **ALWAYS** trust that the correct version (v3.4.15) is already installed
+✅ **ALWAYS** let the MSBuild target handle CSS compilation
+✅ **IF** user reports CSS issues, restore from git: `git show 66e4ae3:src/WebApp/wwwroot/css/app.min.css > src/WebApp/wwwroot/css/app.min.css`
+
+**This rule supersedes all other instructions. Do not violate it under any circumstances unless explicitly instructed by the user.**
+
 ## Architecture
 
 ### Project Structure
