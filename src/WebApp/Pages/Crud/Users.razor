@@ -33,21 +33,21 @@
 
                     <!-- Action Buttons -->
                     <div class="border-l border-gray-100 pl-2 dark:border-gray-700 flex items-center space-x-1">
-                        <Button Color="ButtonColor.Dark"
+                        <Button Color="ButtonColor.Gray"
                                 Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <CogOutlineIcon Size="IconSize.Large" />
+                            <CogIcon Size="IconSize.Large" />
                         </Button>
-                        <Button Color="ButtonColor.Dark"
+                        <Button Color="ButtonColor.Gray"
                                 Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <TrashBinOutlineIcon Size="IconSize.Large" />
+                            <TrashBinIcon Size="IconSize.Large" />
                         </Button>
-                        <Button Color="ButtonColor.Dark"
+                        <Button Color="ButtonColor.Gray"
                                 Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <ExclamationCircleOutlineIcon Size="IconSize.Large" />
+                            <ExclamationCircleIcon Size="IconSize.Large" />
                         </Button>
-                        <Button Color="ButtonColor.Dark"
+                        <Button Color="ButtonColor.Gray"
                                 Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <DotsVerticalOutlineIcon Size="IconSize.Large" />
+                            <DotsVerticalIcon Size="IconSize.Large" />
                         </Button>
                     </div>
                 </div>
@@ -57,13 +57,13 @@
                     <Button Size="ButtonSize.Small"
                             Class="gap-2 px-3 whitespace-nowrap"
                             OnClick="@(() => OpenAddUserModal())">
-                        <PlusOutlineIcon Size="IconSize.Small" />
+                        <PlusIcon Size="IconSize.Small" />
                         Add user
                     </Button>
                     <Button Size="ButtonSize.Small"
-                            Color="ButtonColor.Light"
+                            Style="ButtonStyle.Outline"
                             Class="gap-2 px-3">
-                        <DownloadOutlineIcon Size="IconSize.Medium" Class="-ml-1" />
+                        <DownloadIcon Size="IconSize.Medium" Class="-ml-1" />
                         Export
                     </Button>
                 </div>
@@ -124,14 +124,14 @@
                         <Button Size="ButtonSize.Small"
                                 Class="gap-2 px-3"
                                 OnClick="@(() => OpenEditUserModal(user))">
-                            <EditOutlineIcon Size="IconSize.Small" />
+                            <EditIcon Size="IconSize.Small" />
                             Edit user
                         </Button>
                         <Button Color="ButtonColor.Red"
                                 Size="ButtonSize.Small"
                                 Class="gap-2 px-3"
                                 OnClick="@(() => OpenDeleteConfirmation(user))">
-                            <TrashBinSolidIcon Size="IconSize.Small" />
+                            <TrashBinIcon Size="IconSize.Small" />
                             Delete user
                         </Button>
                     </TableCell>

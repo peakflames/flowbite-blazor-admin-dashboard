@@ -28,26 +28,28 @@
                 <!-- Search Input -->
                 <div class="flex items-center space-x-2">
                     <TextInput @bind-Value="SearchQuery"
-                              Placeholder="Search for products"
-                              Class="me-6 w-80 border xl:w-96" />
+                              Placeholder="Search for users"
+                              Class="me-4 w-80 border xl:w-96" />
 
                     <!-- Action Buttons -->
-                    <Button Color="ButtonColor.Dark"
-                            Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                        <CogOutlineIcon Size="IconSize.Large" />
-                    </Button>
-                    <Button Color="ButtonColor.Dark"
-                            Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                        <TrashBinOutlineIcon Size="IconSize.Large" />
-                    </Button>
-                    <Button Color="ButtonColor.Dark"
-                            Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                        <ExclamationCircleOutlineIcon Size="IconSize.Large" />
-                    </Button>
-                    <Button Color="ButtonColor.Dark"
-                            Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                        <DotsVerticalOutlineIcon Size="IconSize.Large" />
-                    </Button>
+                    <div class="border-l border-gray-100 pl-2 dark:border-gray-700 flex items-center space-x-1">
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <CogIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <TrashBinIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <ExclamationCircleIcon Size="IconSize.Large" />
+                        </Button>
+                        <Button Color="ButtonColor.Dark"
+                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
+                            <DotsVerticalIcon Size="IconSize.Large" />
+                        </Button>
+                    </div>
                 </div>
 
                 <!-- Add Product Button -->
@@ -110,18 +112,18 @@
                         <TableCell class="p-4">
                             @product.Discount
                         </TableCell>
-                        <TableCell class="space-x-2 whitespace-nowrap">
+                        <TableCell class="space-x-2 whitespace-nowrap p-4">
                             <Button Size="ButtonSize.Small"
                                     Class="gap-2 px-3"
                                     OnClick="@(() => OpenEditProductModal(product))">
-                                <EditOutlineIcon Size="IconSize.Small" />
+                                <EditIcon Size="IconSize.Small" />
                                 Update
                             </Button>
                             <Button Color="ButtonColor.Red"
                                     Size="ButtonSize.Small"
                                     Class="gap-2 px-3"
                                     OnClick="@(() => OpenDeleteConfirmation(product))">
-                                <TrashBinSolidIcon Size="IconSize.Small" />
+                                <TrashBinIcon Size="IconSize.Small" />
                                 Delete item
                             </Button>
                         </TableCell>
