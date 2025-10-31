@@ -1,0 +1,32 @@
+@page "/errors/500"
+@layout MarketingLayout
+@using Flowbite.Components
+
+<PageTitle>Server error</PageTitle>
+
+<main class="bg-gray-50 dark:bg-gray-900">
+    <div class="mx-auto flex h-screen flex-col items-center justify-center px-6 dark:bg-gray-900 xl:px-0">
+        <div class="mb-5 block md:max-w-lg">
+            <img src="images/illustrations/500.svg"
+                 alt="astronaut"
+                 class="w-full" />
+        </div>
+
+        <div class="text-center xl:max-w-4xl">
+            <h1 class="mb-3 text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
+                Something has gone seriously wrong
+            </h1>
+            <p class="mb-5 text-base font-normal text-gray-500 dark:text-gray-300 md:text-lg">
+                It's always time for a coffee break. We should be back by the time you finish your coffee.
+            </p>
+            <Button Href="/">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clip-rule="evenodd" />
+                </svg>
+                Go back home
+            </Button>
+        </div>
+    </div>
+</main>
