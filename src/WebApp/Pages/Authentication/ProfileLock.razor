@@ -1,0 +1,87 @@
+@page "/authentication/profile-lock"
+@layout MarketingLayout
+@using System.ComponentModel.DataAnnotations
+@using Flowbite.Components
+@using Flowbite.Icons
+
+<PageTitle>Profile lock</PageTitle>
+
+<main class="bg-gray-50 dark:bg-gray-900 w-full">
+    <div class="mx-auto flex min-h-screen flex-col items-center justify-center px-6 pt-8 dark:bg-gray-900 md:h-screen">
+        <a href="/" class="mb-8 flex items-center justify-center text-2xl font-semibold text-gray-900 dark:text-white lg:mb-10">
+            <img src="/images/flowbite.svg" class="mr-4 h-11" alt="Flowbite Logo" />
+            <span>Flowbite</span>
+        </a>
+
+        <Card Size="CardSize.Medium" class="w-full max-w-md p-4 sm:p-6">
+            <div class="mb-5 flex items-center space-x-4">
+                <img src="@UserInfo.ImageUrl" alt="@UserInfo.Name" class="h-10 w-10 rounded-full" />
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                        @UserInfo.Name
+                    </h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-300">
+                        Better to be safe than sorry.
+                    </p>
+                </div>
+            </div>
+
+            <EditForm Model="@Form" OnValidSubmit="@HandleSubmit" class="mt-8 space-y-6">
+                <DataAnnotationsValidator />
+
+                <label class="block space-y-2 text-sm font-medium text-gray-900 dark:text-white" for="password">
+                    <span>Your password</span>
+                    <TextInput Id="password"
+                              @bind-Value="Form.Password"
+                              Type="password"
+                              Placeholder="••••••••"
+                              Required="true"
+                              Class="border outline-none dark:border-gray-600 dark:bg-gray-700" />
+                    <ValidationMessage For="@(() => Form.Password)" class="text-sm text-red-600" />
+                </label>
+
+                <div class="flex items-start space-x-3">
+                    <InputCheckbox @bind-Value="Form.AcceptTerms"
+                                   Id="profile-terms"
+                                   class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800" />
+                    <label for="profile-terms" class="text-sm text-gray-500 dark:text-gray-300 select-none">
+                        I accept the
+                        <a href="/" class="text-primary-700 hover:underline dark:text-primary-500">Terms and Conditions</a>
+                    </label>
+                </div>
+
+                <Button Type="ButtonType.Submit" Size="ButtonSize.Large" Class="inline-flex items-center gap-2">
+                    <LockOpenIcon Size="IconSize.Large" />
+                    Unlock
+                </Button>
+            </EditForm>
+        </Card>
+    </div>
+</main>
+
+@code {
+    private ProfileLockForm Form { get; set; } = new();
+
+    private ProfileUser UserInfo { get; } = new()
+    {
+        Name = "Bonnie Green",
+        ImageUrl = "/images/users/bonnie-green.png"
+    };
+
+    private Task HandleSubmit() => Task.CompletedTask;
+
+    private sealed class ProfileLockForm
+    {
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; } = string.Empty;
+
+        public bool AcceptTerms { get; set; } = true;
+    }
+
+    private sealed class ProfileUser
+    {
+        public string Name { get; init; } = string.Empty;
+        public string ImageUrl { get; init; } = string.Empty;
+    }
+}
