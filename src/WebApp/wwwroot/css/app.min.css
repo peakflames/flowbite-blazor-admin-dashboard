@@ -711,6 +711,10 @@ video {
   margin-right: 3rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .mr-3 {
   margin-right: 0.75rem;
 }
@@ -1853,6 +1857,10 @@ img.relative.inline-block.rounded-full {
     width: auto;
   }
 
+  .md\:max-w-md {
+    max-width: 28rem;
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1889,6 +1897,11 @@ img.relative.inline-block.rounded-full {
 
   .md\:pt-32 {
     padding-top: 8rem;
+  }
+
+  .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 
   .md\:text-sm {
@@ -1971,6 +1984,11 @@ img.relative.inline-block.rounded-full {
     padding-left: 0px;
     padding-right: 0px;
   }
+
+  .lg\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -1988,6 +2006,10 @@ img.relative.inline-block.rounded-full {
 
   .xl\:w-96 {
     width: 24rem;
+  }
+
+  .xl\:max-w-4xl {
+    max-width: 56rem;
   }
 
   .xl\:max-w-xs {
