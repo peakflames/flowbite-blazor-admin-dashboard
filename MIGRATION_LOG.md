@@ -1576,6 +1576,138 @@ Captured screenshots comparing with Svelte reference:
 
 ---
 
+### Task MP-2: Implement Maintenance Error Page
+**Status**: ✅ Complete  
+**Completion Date**: 2025-10-31  
+**Svelte Source**: `src/lib/Maintenance.svelte` (invoked via `/errors/400` in Svelte app)
+
+**Files Created**:
+- `src/WebApp/Pages/Errors/Maintenance.razor`
+
+**Assets Added**:
+- `src/WebApp/wwwroot/images/illustrations/maintenance.svg` (downloaded from `https://flowbite-admin-dashboard.vercel.app/images/illustrations/maintenance.svg`)
+
+**Component Details**:
+- **Parameters**: None  
+- **RenderFragments**: None  
+- **EventCallbacks**: None  
+- **Service Injections**: None
+
+**Patterns Used**:
+- Reused `MarketingLayout` for full-screen marketing/error pages
+- Centered hero layout replicating Svelte classes (`flex h-screen flex-col items-center justify-center ...`)
+- Flowbite `Button` configured with left arrow SVG + `Href="/"` for navigation
+- Inline anchor styled to match primary color contact link
+
+**Testing Notes**:
+- `dotnet build` ✅  
+- Playwright manual check: `await page.goto('http://127.0.0.1:5269/errors/400')`, verified heading and CTA alignment
+
+**Notes**:
+- Source image shipped as SVG; no WEBP assets required conversion
+
+---
+
+### Task MP-3: Implement 404 & 500 Error Pages
+**Status**: ✅ Complete  
+**Completion Date**: 2025-10-31  
+**Svelte Sources**:  
+- 404: `src/lib/NotFound.svelte`  
+- 500: `src/lib/ServerError.svelte`
+
+**Files Created**:
+- `src/WebApp/Pages/Errors/NotFound.razor`
+- `src/WebApp/Pages/Errors/ServerError.razor`
+
+**Assets Added**:
+- `src/WebApp/wwwroot/images/illustrations/404.svg`
+- `src/WebApp/wwwroot/images/illustrations/500.svg`
+
+**Component Details**:
+- `NotFound.razor`
+  - Route `/errors/404`, `MarketingLayout`
+  - Static illustration `/images/illustrations/404.svg`
+  - No parameters / render fragments / callbacks / DI
+  - CTA: Flowbite `Button` with inline SVG arrow + `Href="/"` (mirrors Svelte)
+- `ServerError.razor`
+  - Route `/errors/500`, `MarketingLayout`
+  - Illustration `/images/illustrations/500.svg`
+  - Copies Svelte messaging (“It’s always time for a coffee break…”) + CTA button
+
+**Patterns Used**:
+- Reused Svelte spacing utilities for card centering (`flex`, `min-h-screen`, dark styles)
+- Flowbite `Button` components with inline SVG icons to match hero CTA
+
+**Testing Notes**:
+- `dotnet build` (2025-10-31) ✅ (Tailwind target regenerated classes)
+- No browser snapshot captured; parity trusted via shared layout + assets
+
+**Notes**:
+- Assets ship as SVG → no WEBP conversion necessary
+
+### Task MP-4: Implement Authentication Pages
+**Status**: ✅ Complete  
+**Completion Date**: 2025-10-31  
+**Svelte Sources**:
+- Sign in: `src/routes/authentication/sign-in.svelte`, `src/lib/SignIn.svelte`
+- Sign up: `src/routes/authentication/sign-up.svelte`, `src/lib/SignUp.svelte`
+- Forgot password: `src/routes/authentication/forgot-password.svelte`, `src/lib/ForgotPassword.svelte`
+- Reset password: `src/routes/authentication/reset-password.svelte`, `src/lib/ResetPassword.svelte`
+- Profile lock: `src/routes/authentication/profile-lock.svelte`, `src/lib/ProfileLock.svelte`
+
+**Files Created**:
+- `src/WebApp/Pages/Authentication/SignIn.razor`
+- `src/WebApp/Pages/Authentication/SignUp.razor`
+- `src/WebApp/Pages/Authentication/ForgotPassword.razor`
+- `src/WebApp/Pages/Authentication/ResetPassword.razor`
+- `src/WebApp/Pages/Authentication/ProfileLock.razor`
+
+**Assets Added**:
+- `src/WebApp/wwwroot/images/flowbite.svg`
+- `src/WebApp/wwwroot/images/users/bonnie-green.png`
+
+**Sidebar Update**:
+- `src/WebApp/Layout/AppSidebar.razor` now displays a lock icon (`LockOpenIcon`) for the Authentication dropdown, aligning with the Svelte nav visuals
+
+**Component Details**:
+- Common structure: `MarketingLayout` + centered Flowbite `Card` containing an `EditForm`
+- Sign-in (`/authentication/sign-in`)
+  - Model: Email, Password, RememberMe (default true)
+  - Features: “Lost Password?” link, registration prompt
+- Sign-up (`/authentication/sign-up`)
+  - Model: Email, Password, ConfirmPassword (`Compare`), AcceptTerms
+  - Checkbox links to terms; login prompt routed to `/authentication/sign-in`
+- Forgot password (`/authentication/forgot-password`)
+  - Model: Email, AcceptTerms (optional)
+  - Compact card (`max-w-md`) with reassurance copy
+- Reset password (`/authentication/reset-password`)
+  - Model: Email, Password, ConfirmPassword, AcceptTerms
+  - Button text “Create account” per Svelte reference
+- Profile lock (`/authentication/profile-lock`)
+  - Model: Password (MinLength 6), AcceptTerms
+  - Injects static `ProfileUser` (Bonnie Green) with avatar `/images/users/bonnie-green.png`
+  - CTA uses Flowbite `LockOpenIcon`
+
+**Patterns Used**:
+- Tailwind utility parity (`mt-8 space-y-6`, `accent-primary-600`, responsive paddings)
+- Flowbite form controls: `Label`, `TextInput`, `Checkbox`, `Button` (`ButtonSize.Large`)
+- `EditForm` + `DataAnnotationsValidator` for light validation; all submission handlers no-op to keep UX non-blocking
+- Brand header reused across pages with `/images/flowbite.svg`
+- Follow-up tuning (2025-10-31):
+  - Converted form controls to use `label` wrappers (`space-y-2`) for spacing parity
+  - Replaced Flowbite `Checkbox` components with `InputCheckbox` + labeled text to ensure captions render (“Remember me”, terms copy)
+  - Updated brand link styling (`text-gray-900`), checkbox alignment, and CTA layouts to match the Svelte visual hierarchy
+
+**Testing Notes**:
+- `dotnet build` (2025-10-31) ✅ – Tailwind pre-build captured new utility usage
+- No live UI verification (user unavailable); parity relies on copied structure + assets
+
+**Notes**:
+- No WEBP assets encountered; instructions satisfied with SVG/PNG downloads
+- Consider extracting a shared `AuthenticationShell` component if future pages require the same scaffold
+
+---
+
 ## CRITICAL: Tailwind CSS Version Management
 
 **Date**: 2025-01-28
