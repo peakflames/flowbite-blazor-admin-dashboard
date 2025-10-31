@@ -1572,6 +1572,7 @@ Captured screenshots comparing with Svelte reference:
 3. Capture responsive screenshots (mobile/tablet/desktop) for visual regression baselines
 4. ✅ 2025-10-31 — Confirmed pricing page and sidebar use `/pages/pricing` route (matches Svelte reference)
 5. ✅ 2025-10-31 — Matched pricing card layout to Svelte reference (feature list flex growth + button at card footer)
+6. ✅ 2025-10-31 — Updated shared header/footer branding to display “Flowbite” (aligns with marketing identity)
 
 ---
 
