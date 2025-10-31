@@ -23,45 +23,42 @@
         </Heading>
 
         <!-- Toolbar -->
-        <div class="w-full py-4 text-gray-500 dark:text-gray-300">
-            <div class="flex flex-wrap items-center justify-between">
+        <Toolbar Embedded="true" Class="w-full py-4 text-gray-500 dark:text-gray-300">
+            <ChildContent>
                 <!-- Search Input -->
-                <div class="flex items-center space-x-2">
-                    <TextInput @bind-Value="SearchQuery"
-                              Placeholder="Search for users"
-                              Class="me-4 w-80 border xl:w-96" />
+                <TextInput @bind-Value="SearchQuery"
+                          Placeholder="Search for users"
+                          Class="me-4 w-80 border xl:w-96" />
 
-                    <!-- Action Buttons -->
-                    <div class="border-l border-gray-100 pl-2 dark:border-gray-700 flex items-center space-x-1">
-                        <Button Color="ButtonColor.Dark"
-                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <CogIcon Size="IconSize.Large" />
-                        </Button>
-                        <Button Color="ButtonColor.Dark"
-                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <TrashBinIcon Size="IconSize.Large" />
-                        </Button>
-                        <Button Color="ButtonColor.Dark"
-                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <ExclamationCircleIcon Size="IconSize.Large" />
-                        </Button>
-                        <Button Color="ButtonColor.Dark"
-                                Class="m-0 rounded p-1 hover:bg-gray-100 focus:ring-0 dark:hover:bg-gray-700">
-                            <DotsVerticalIcon Size="IconSize.Large" />
-                        </Button>
-                    </div>
+                <!-- Action Buttons with Separator -->
+                <div class="border-l border-gray-100 pl-2 dark:border-gray-700 flex items-center space-x-1">
+                    <ToolbarButton AriaLabel="Settings">
+                        <CogIcon Size="IconSize.Large" />
+                    </ToolbarButton>
+                    <ToolbarButton AriaLabel="Delete">
+                        <TrashBinIcon Size="IconSize.Large" />
+                    </ToolbarButton>
+                    <ToolbarButton AriaLabel="Alert">
+                        <ExclamationCircleIcon Size="IconSize.Large" />
+                    </ToolbarButton>
+                    <ToolbarButton AriaLabel="More options">
+                        <DotsVerticalIcon Size="IconSize.Large" />
+                    </ToolbarButton>
                 </div>
-
+            </ChildContent>
+            <End>
                 <!-- Add Product Button -->
-                <div class="space-x-2">
+                <div class="flex items-center space-x-2">
                     <Button Class="whitespace-nowrap"
                             OnClick="@(() => OpenAddProductModal())">
                         Add new product
                     </Button>
                 </div>
-            </div>
-        </div>
+            </End>
+        </Toolbar>
+
     </div>
+    
 
     <!-- Products Table -->
     <div class="overflow-x-auto">

@@ -13,7 +13,11 @@
       "Bash(xargs kill -9)",
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_resize",
-      "mcp__playwright__browser_click"
+      "mcp__playwright__browser_click",
+      "Read(//mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/routes/(sidebar)/crud/users/**)",
+      "Read(//mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte/**)",
+      "Read(//mnt/c/Users/tschavey/projects/themesberg/flowbite-blazor/**)",
+      "Read(//mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/**)"
     ],
     "deny": [],
     "ask": []
