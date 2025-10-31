@@ -1412,7 +1412,7 @@ The Blazor sidebar had flat navigation links while the Svelte reference uses col
 - **Layouts** (dropdown with: Stacked, Sidebar)
 - **CRUD** (dropdown with: Products, Users)
 - Settings (single link)
-- **Pages** (dropdown with: Pricing, Maintenance, 404, 500)
+- **Pages** (dropdown with: Pricing ✅ (2025-10-31), Maintenance, 404, 500)
 - **Authentication** (dropdown with: Sign in, Sign up, Forgot password, Reset password, Profile lock)
 - **Playground** (dropdown with: Stacked, Sidebar)
 
@@ -1527,6 +1527,51 @@ Captured screenshots comparing with Svelte reference:
 
 **Status**: ✅ Complete - Sidebar now fully matches Svelte reference implementation
 
+
+---
+
+## Post-Phase Enhancements: Marketing Pages
+
+### Task MP-1: Implement Pricing Landing Page
+**Status**: ✅ Complete  
+**Completion Date**: 2025-10-31  
+**Svelte Source**: `/mnt/c/Users/tschavey/projects/themesberg/flowbite-svelte-admin-dashboard/src/routes/(no-layout)/pages/pricing/+page.svelte`
+
+**Files Created**:
+- `src/WebApp/Pages/Pricing.razor`
+- `src/WebApp/Layout/MarketingLayout.razor`
+- `src/WebApp/Domain/PricingModels.cs`
+- `src/WebApp/Services/PricingService.cs`
+
+**Files Modified**:
+- `src/WebApp/Program.cs` (registered `PricingService`)
+
+**Component Details**:
+- **Parameters**: None
+- **RenderFragments**: None
+- **EventCallbacks**: None
+- **Service Injections**: `@inject PricingService PricingService`
+
+**Patterns Used**:
+- Lightweight `MarketingLayout` to render marketing pages without admin chrome
+- Data-first rendering (plans, comparison table, FAQ, footer menus) sourced from `PricingService`
+- `ToggleSwitch`-based yearly/monthly billing toggle with derived period label
+- `MarkupString` for rich text answers and feature descriptions
+- RenderFragment builder for comparison table check/cross icons
+
+**Issues Encountered**:
+- `@layout null` generated `LayoutAttribute` compile error; resolved by introducing `MarketingLayout.razor`
+- Mobile navigation state handled manually since LayoutBase helpers target sidebar layouts
+
+**Testing Notes**:
+- `dotnet build` (2025-10-31) ✅
+
+**Next Steps**:
+1. Wire pricing CTA to upcoming authentication flow when available
+2. Reintroduce SEO metadata via shared MetaTag component once marketing strategy is finalized
+3. Capture responsive screenshots (mobile/tablet/desktop) for visual regression baselines
+4. ✅ 2025-10-31 — Confirmed pricing page and sidebar use `/pages/pricing` route (matches Svelte reference)
+5. ✅ 2025-10-31 — Matched pricing card layout to Svelte reference (feature list flex growth + button at card footer)
 
 ---
 
@@ -1979,4 +2024,3 @@ Since Flowbite Blazor alpha doesn't have `Indicator` component:
 **Total Lines**: ~811 lines of new code
 
 ---
-

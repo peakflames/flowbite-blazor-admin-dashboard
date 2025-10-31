@@ -1,0 +1,274 @@
+@page "/pages/pricing"
+@layout MarketingLayout
+@using Microsoft.AspNetCore.Components
+@using Flowbite.Components
+@using WebApp.Domain
+@inject PricingService PricingService
+
+@if (_data is null)
+{
+    <div class="flex min-h-screen items-center justify-center bg-gray-50 text-gray-600 dark:bg-gray-900 dark:text-gray-300">
+        <span>Loading pricing data...</span>
+    </div>
+}
+else
+{
+    <PageTitle>@_data.Title</PageTitle>
+
+    <nav class="fixed left-0 top-0 z-40 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+        <div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-4 px-4 py-3">
+            <a class="flex items-center gap-2" href="/">
+                <img src="@_data.Brand.Src" alt="@_data.Brand.Alt" class="h-8 w-8" />
+                <span class="text-xl font-semibold text-gray-900 dark:text-white">@_data.Brand.Name</span>
+            </a>
+
+            <button type="button"
+                    class="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-400 dark:hover:bg-gray-700 lg:hidden"
+                    aria-expanded="@_isMobileNavOpen"
+                    aria-controls="pricing-nav"
+                    @onclick="ToggleMobileNav">
+                <span class="sr-only">Toggle navigation</span>
+                <svg class="@($"h-6 w-6 {(!_isMobileNavOpen ? "block" : "hidden")}")" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+                </svg>
+                <svg class="@($"h-6 w-6 {(_isMobileNavOpen ? "block" : "hidden")}")" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="hidden items-center gap-6 lg:flex">
+                @foreach (var link in _navLinks)
+                {
+                    <a href="@link.Href" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">@link.Text</a>
+                }
+                <DarkMode />
+                <Button Class="gap-2 px-3" Size="ButtonSize.Small">
+                    <span>Login/Register</span>
+                </Button>
+            </div>
+        </div>
+
+        <div id="pricing-nav" class="@($"border-t border-gray-200 bg-white px-4 py-4 dark:border-gray-700 dark:bg-gray-900 lg:hidden {(_isMobileNavOpen ? "block" : "hidden")}")">
+            <div class="flex flex-col space-y-3">
+                @foreach (var link in _navLinks)
+                {
+                    <a href="@link.Href" class="text-base font-medium text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white" @onclick="CloseMobileNav">@link.Text</a>
+                }
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-gray-600 dark:text-gray-300">Dark mode</span>
+                    <DarkMode />
+                </div>
+                <Button Class="w-full gap-2 px-3" Size="ButtonSize.Small" OnClick="@CloseMobileNav">
+                    Login/Register
+                </Button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="bg-gray-50 pt-24 text-gray-900 dark:bg-gray-900 dark:text-white md:pt-32">
+        <div class="mx-auto flex max-w-screen-xl flex-col gap-16 px-4 lg:px-0">
+            <section class="max-w-3xl">
+                <span class="mb-3 block text-sm font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-500">@_data.Subtitle</span>
+                <h1 class="mb-4 text-3xl font-bold sm:text-4xl">@_data.HeroTitle</h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300">@_data.HeroLeadingText</p>
+                <div class="mt-8 flex flex-wrap items-center gap-3 text-gray-600 dark:text-gray-300">
+                    <span class="text-base font-medium">Monthly</span>
+                    <ToggleSwitch @bind-Checked="_isYearly"
+                                  Class="ms-2"
+                                  AriaLabel="Toggle yearly billing" />
+                    <span class="text-base font-medium">Yearly</span>
+                    <span class="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 dark:bg-primary-900 dark:text-primary-200">
+                        Save up to 20% yearly
+                    </span>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                @foreach (var plan in _data.Plans)
+                {
+                    <div class="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">@plan.Title</h3>
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">@plan.Subtitle</p>
+                        </div>
+
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-3xl font-bold text-gray-900 dark:text-white">@GetPrice(plan)</span>
+                            <span class="text-sm font-medium text-gray-500 dark:text-gray-300">/ @PeriodLabel</span>
+                        </div>
+
+                        <ul class="mt-6 flex-1 space-y-4 text-left text-sm text-gray-600 dark:text-gray-300">
+                            @foreach (var feature in plan.Features)
+                            {
+                                <li class="flex items-start gap-3">
+                                    @if (feature.IsAvailable)
+                                    {
+                                        <svg class="mt-0.5 h-5 w-5 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <svg class="mt-0.5 h-5 w-5 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    }
+                                    <span>@feature.Content</span>
+                                </li>
+                            }
+                        </ul>
+
+                        <Button Class="mt-8 w-full justify-center gap-2 px-4" Size="ButtonSize.Medium">
+                            Get started
+                        </Button>
+                    </div>
+                }
+            </section>
+
+            <section class="flex flex-col gap-6">
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Compare plans</h2>
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 text-gray-600 dark:bg-gray-900 dark:text-gray-300">
+                                <tr>
+                                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold">Feature</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold">Freelancer</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold">Company</th>
+                                    <th scope="col" class="px-6 py-4 text-left text-sm font-semibold">Enterprise</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white text-sm dark:bg-gray-800">
+                                @foreach (var row in _data.ComparisonRows)
+                                {
+                                    <tr class="border-b border-gray-200 last:border-b-0 dark:border-gray-700">
+                                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">@row.Name</td>
+                                        <td class="px-6 py-4">@RenderComparisonCell(row.Freelancer)</td>
+                                        <td class="px-6 py-4">@RenderComparisonCell(row.Company)</td>
+                                        <td class="px-6 py-4">@RenderComparisonCell(row.Enterprise)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">Frequently asked questions</h2>
+                <div class="space-y-4">
+                    @foreach (var faq in _data.Faqs)
+                    {
+                        <details class="group rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <summary class="flex cursor-pointer list-none items-center justify-between text-left text-lg font-medium text-gray-900 dark:text-white">
+                                @faq.Title
+                                <span class="ml-4 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 text-gray-500 transition-transform group-open:rotate-180 dark:border-gray-600 dark:text-gray-300">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+                                    </svg>
+                                </span>
+                            </summary>
+                            <div class="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                                @faq.Answer
+                            </div>
+                        </details>
+                    }
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 bg-white py-12 dark:border-gray-700 dark:bg-gray-900">
+        <div class="mx-auto flex max-w-screen-xl flex-col gap-10 px-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="max-w-md">
+                <a href="@_data.Brand.Href" class="flex items-center gap-2">
+                    <img src="@_data.Brand.Src" alt="@_data.Brand.Alt" class="h-10 w-10" />
+                    <span class="text-2xl font-semibold text-gray-900 dark:text-white">@_data.Brand.Name</span>
+                </a>
+                <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+                    @_data.FooterDescription
+                </div>
+            </div>
+            <div class="grid flex-1 grid-cols-2 gap-8 text-sm sm:grid-cols-4">
+                @foreach (var menu in _data.FooterMenus)
+                {
+                    <div>
+                        <h3 class="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">@menu.Title</h3>
+                        <ul>
+                            @foreach (var link in menu.Links)
+                            {
+                                <li class="@link.ClassName">
+                                    <a class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" href="@link.Href">@link.Item</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="mt-10 border-t border-gray-200 pt-6 text-center text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
+            © @(DateTime.UtcNow.Year) Flowbite. All rights reserved.
+        </div>
+    </footer>
+}
+
+@code {
+    private static readonly (string Text, string Href)[] _navLinks =
+    {
+        ("Home", "/"),
+        ("Team", "/"),
+        ("Pricing", "/pricing"),
+        ("Contact", "/")
+    };
+
+    private PricingPageData? _data;
+    private bool _isYearly;
+    private bool _isMobileNavOpen;
+
+    private string PeriodLabel => _isYearly ? "year" : "month";
+
+    protected override void OnInitialized()
+    {
+        _data = PricingService.GetPricingPageData();
+    }
+
+    private string GetPrice(PricingPlan plan) =>
+        _isYearly ? plan.YearlyPrice : plan.MonthlyPrice;
+
+    private void ToggleMobileNav() => _isMobileNavOpen = !_isMobileNavOpen;
+
+    private void CloseMobileNav() => _isMobileNavOpen = false;
+
+    private RenderFragment RenderComparisonCell(PricingComparisonValue value) => builder =>
+    {
+        if (value.Included.HasValue)
+        {
+            var included = value.Included.Value;
+            var color = included ? "text-green-500 dark:text-green-400" : "text-red-500 dark:text-red-400";
+            var iconPath = included ? "M5 13l4 4L19 7" : "M6 18L18 6M6 6l12 12";
+
+            builder.OpenElement(0, "span");
+            builder.AddAttribute(1, "class", $"inline-flex items-center {color}");
+            builder.OpenElement(2, "svg");
+            builder.AddAttribute(3, "class", "h-5 w-5");
+            builder.AddAttribute(4, "fill", "none");
+            builder.AddAttribute(5, "stroke", "currentColor");
+            builder.AddAttribute(6, "stroke-width", "2");
+            builder.AddAttribute(7, "viewBox", "0 0 24 24");
+            builder.OpenElement(8, "path");
+            builder.AddAttribute(9, "stroke-linecap", "round");
+            builder.AddAttribute(10, "stroke-linejoin", "round");
+            builder.AddAttribute(11, "d", iconPath);
+            builder.CloseElement();
+            builder.CloseElement();
+            builder.CloseElement();
+        }
+        else if (!string.IsNullOrEmpty(value.Text))
+        {
+            builder.OpenElement(0, "span");
+            builder.AddAttribute(1, "class", "text-sm text-gray-600 dark:text-gray-300");
+            builder.AddMarkupContent(2, value.Text);
+            builder.CloseElement();
+        }
+    };
+}

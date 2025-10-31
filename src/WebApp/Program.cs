@@ -22,5 +22,5 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
   services.AddFlowbite();
   services.AddScoped<PokemonService>();
   services.AddScoped<SettingsService>();
+  services.AddScoped<PricingService>();
 }
-
