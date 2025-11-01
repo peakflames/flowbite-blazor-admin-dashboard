@@ -1,0 +1,55 @@
+@using ApexCharts
+
+<Card Size="CardSize.ExtraLarge" class="@($"max-w-none p-4 sm:p-6 shadow-sm {CardClass}")">
+  <div class="mb-4 flex flex-col gap-4 border-b border-gray-200 pb-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700">
+    <div>
+      <h3 class="text-base font-medium text-gray-500 dark:text-gray-300">@Title</h3>
+      @if (!string.IsNullOrWhiteSpace(Subtitle))
+      {
+        <p class="text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white">@Subtitle</p>
+      }
+      @if (ShowChangeIndicator)
+      {
+        <div class="@($"mt-2 inline-flex items-baseline gap-2 text-sm {ChangeCss}")">
+          <span class="font-semibold">@FormattedChange</span>
+          @if (!string.IsNullOrWhiteSpace(ChangeCaption))
+          {
+            <span class="text-xs text-gray-500 dark:text-gray-400">@ChangeCaption</span>
+          }
+        </div>
+      }
+    </div>
+    @if (HeaderContent is not null)
+    {
+      <div class="flex items-center gap-3 sm:justify-end">
+        @HeaderContent
+      </div>
+    }
+  </div>
+
+  <ApexChart @ref="_chart"
+             TItem="NumericPoint"
+             Options="_options"
+             Height="420">
+    @if (Series?.Count > 0)
+    {
+      foreach (var series in Series)
+      {
+        <ApexPointSeries TItem="NumericPoint"
+                         Items="series.Points"
+                         Name="series.Name"
+                         SeriesType="SeriesType.Bar"
+                         Color="series.Color"
+                         XValue="p => p.Category"
+                         YValue="p => p.Value" />
+      }
+    }
+  </ApexChart>
+
+  @if (FooterContent is not null)
+  {
+    <div class="mt-4 border-t border-gray-200 pt-4 text-sm text-gray-500 sm:pt-6 dark:border-gray-700 dark:text-gray-300">
+      @FooterContent
+    </div>
+  }
+</Card>

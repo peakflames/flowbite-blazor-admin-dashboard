@@ -1,7 +1,8 @@
-
+using ApexCharts;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using WebApp;
+using WebApp.Charts;
 using WebApp.Services;
 using Flowbite.Services;
 
@@ -20,6 +21,10 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
 {
   services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
   services.AddFlowbite();
+  services.AddApexCharts(options =>
+  {
+    options.GlobalOptions = DashboardChartOptions.CreateGlobalDefaults();
+  });
   services.AddScoped<PokemonService>();
   services.AddScoped<SettingsService>();
   services.AddScoped<PricingService>();
