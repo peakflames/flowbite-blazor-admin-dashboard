@@ -63,13 +63,20 @@ Additional factories (`thinfillbars.ts`, `thinstackbars.ts`) provide monochrome 
 - `src/WebApp/Components/Dashboard/CategorySalesReport.razor` outputs the multi-series grouped bar report fed by `ChartSeriesDefinition<NumericPoint>`.
 - `src/WebApp/Components/Dashboard/TrafficCard.razor` maps donut slices to `CreateTrafficDonutOptions` and exposes header/body/footer slots for device stats.
 - `src/WebApp/Domain/Dashboard/ChartSeriesDefinition.cs` and `NumericPoint.cs` provide simple immutable data records shared across all chart components.
+- `src/WebApp/Pages/Dashboard.razor(.cs)` wires the new components together, translating the original Svelte option factories into typed `ChartSeriesDefinition<NumericPoint>` collections and rendering them with Flowbite cards.
+
+## Theme Synchronization
+- `src/WebApp/Services/ThemeService.cs` imports `/js/themeObserver.js` and broadcasts `ThemeChanged` events after watching the document class list for Flowbite’s dark-mode toggles.
+- `src/WebApp/wwwroot/js/themeObserver.js` hosts the MutationObserver that keeps `ThemeService` informed about the `dark` class on `<html>`.
+- `src/WebApp/Components/Dashboard/ThemeObserver.razor` lives in `MainLayout` to initialize the observer, and invokes `IApexChartService.SetGlobalOptionsAsync` with `DashboardChartOptions.CreateGlobalDefaults(isDark)` so every chart inherits palette updates.
+- Per-page consumers (e.g., `Pages/Dashboard.razor(.cs)`) subscribe to `ThemeService` to re-evaluate chart option factories when the theme flips, keeping local chart instances in sync with the global Apex configuration.
 
 ## To-Do Checklist
 - [x] Inventory every Flowbite chart instance and its option factory.
- - [x] Add Blazor-ApexCharts service registration with default palette/theme.
- - [x] Implement Blazor card + chart components, translating options chart-by-chart.
-- [ ] Bind strongly typed data series for all dashboard visualizations.
-- [ ] Hook dark-mode and locale interactions through `IApexChartService`.
+- [x] Add Blazor-ApexCharts service registration with default palette/theme.
+- [x] Implement Blazor card + chart components, translating options chart-by-chart.
+- [x] Bind strongly typed data series for all dashboard visualizations.
+- [x] Hook dark-mode and locale interactions through `IApexChartService`.
 - [ ] QA the Blazor dashboard against the Svelte reference and document gaps.
 
 ## Verication

@@ -1,0 +1,105 @@
+@page "/dashboard"
+
+<PageTitle>Dashboard</PageTitle>
+
+<div class="space-y-6">
+  <section class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+    <ChartWidget Title="Sales this week"
+                 Subtitle="$45,385"
+                 ChangeValue="12.5m"
+                 ChangeCaption="vs last week"
+                 Series="RevenueSeries"
+                 IsDarkMode="_isDarkMode">
+      <FooterContent>
+        <div class="mt-4 flex flex-col gap-3 border-t border-gray-200 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:pt-6 dark:border-gray-700">
+          <div class="text-gray-500 dark:text-gray-300">
+            Updated 5 minutes ago
+          </div>
+          <a href="#"
+             class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+            View reports →
+          </a>
+        </div>
+      </FooterContent>
+    </ChartWidget>
+  </section>
+
+  <section class="grid grid-cols-1 gap-4 xl:grid-cols-3">
+    <ProductMetricCard Title="New products"
+                       Subtitle="2,340"
+                       ChangeValue="12.5m"
+                       ChangeCaption="Since last month"
+                       Series="ProductQuantitySeries"
+                       ChartType="ProductMetricChartType.Quantity"
+                       IsDarkMode="_isDarkMode" />
+
+    <ProductMetricCard Title="Users"
+                       Subtitle="4,420"
+                       ChangeValue="-3.4m"
+                       ChangeCaption="Since last month"
+                       Series="UserSeries"
+                       ChartType="ProductMetricChartType.Users"
+                       IsDarkMode="_isDarkMode" />
+
+    <ProductMetricCard Title="Users"
+                       Subtitle="4,420"
+                       ChangeValue="-3.4m"
+                       ChangeCaption="Since last month"
+                       Series="UserSeries"
+                       ChartType="ProductMetricChartType.Users"
+                       Horizontal="true"
+                       IsDarkMode="_isDarkMode" />
+  </section>
+
+  <section class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+    <CategorySalesReport Title="Sales by category"
+                         Subtitle="Desktop PC"
+                         ChangeValue="2.5m"
+                         ChangeCaption="Since last month"
+                         Series="CategorySalesSeries"
+                         IsDarkMode="_isDarkMode">
+      <HeaderContent>
+        <Button Color="ButtonColor.Primary" Size="ButtonSize.Small">
+          Download report
+        </Button>
+      </HeaderContent>
+      <FooterContent>
+        <div class="flex flex-col gap-3 text-gray-500 sm:flex-row sm:items-center sm:justify-between dark:text-gray-300">
+          <span>Compare the latest period across all product lines.</span>
+          <a href="#"
+             class="inline-flex items-center gap-2 text-primary-600 hover:underline dark:text-primary-400">
+            View detailed analysis →
+          </a>
+        </div>
+      </FooterContent>
+    </CategorySalesReport>
+
+    <TrafficCard Title="Traffic by device"
+                 Subtitle="Desktop"
+                 SeriesName="Traffic share"
+                 Slices="TrafficSlices"
+                 IsDarkMode="_isDarkMode">
+      <BodyContent>
+        <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+          @foreach (var device in Devices)
+          {
+            <div class="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+              <div class="text-xs uppercase text-gray-500 dark:text-gray-400">@device.Name</div>
+              <div class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">@device.Value</div>
+              <div class="@($"mt-1 text-xs {device.ChangeCss}")">@device.ChangeText</div>
+            </div>
+          }
+        </div>
+      </BodyContent>
+      <FooterContent>
+        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-300">
+          <span>Source: Internal analytics</span>
+          <a href="#"
+             class="inline-flex items-center gap-2 text-primary-600 hover:underline dark:text-primary-400">
+            Full report →
+          </a>
+        </div>
+      </FooterContent>
+    </TrafficCard>
+  </section>
+</div>

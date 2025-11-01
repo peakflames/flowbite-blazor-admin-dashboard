@@ -23,8 +23,9 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
   services.AddFlowbite();
   services.AddApexCharts(options =>
   {
-    options.GlobalOptions = DashboardChartOptions.CreateGlobalDefaults();
+    options.GlobalOptions = DashboardChartOptions.CreateGlobalDefaults(false);
   });
+  services.AddScoped<ThemeService>();
   services.AddScoped<PokemonService>();
   services.AddScoped<SettingsService>();
   services.AddScoped<PricingService>();

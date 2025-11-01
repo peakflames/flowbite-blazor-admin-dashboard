@@ -64,15 +64,17 @@ public static class DashboardChartOptions
 
   public static IReadOnlyList<string> DefaultPalette { get; } = Array.AsReadOnly(FlowbitePaletteValues);
 
-  public static ApexChartBaseOptions CreateGlobalDefaults()
+  public static ApexChartBaseOptions CreateGlobalDefaults(bool isDarkMode)
   {
+    var baseAxisColor = isDarkMode ? AxisColorDark : AxisColorLight;
+
     return new ApexChartBaseOptions
     {
       Colors = new List<string>(FlowbitePaletteValues),
       Chart = new Chart
       {
         FontFamily = FontFamily,
-        ForeColor = AxisColorLight,
+        ForeColor = baseAxisColor,
         Toolbar = new Toolbar
         {
           Show = false
@@ -93,7 +95,7 @@ public static class DashboardChartOptions
         FontWeight = 500,
         Labels = new LegendLabels
         {
-          Colors = AxisColorLight
+          Colors = baseAxisColor
         }
       }
     };
