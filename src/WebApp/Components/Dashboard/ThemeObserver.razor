@@ -1,0 +1,43 @@
+@implements IAsyncDisposable
+@inject ThemeService ThemeService
+@inject IApexChartService ChartService
+
+@code {
+  private bool _disposed;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (!firstRender || _disposed)
+    {
+      return;
+    }
+
+    ThemeService.ThemeChanged += HandleThemeChanged;
+
+    var isDarkMode = await ThemeService.InitializeAsync();
+    await ApplyThemeAsync(isDarkMode);
+  }
+
+  private void HandleThemeChanged(bool isDark)
+  {
+    _ = InvokeAsync(() => ApplyThemeAsync(isDark));
+  }
+
+  private async Task ApplyThemeAsync(bool isDark)
+  {
+    var options = DashboardChartOptions.CreateGlobalDefaults(isDark);
+    await ChartService.SetGlobalOptionsAsync(options, true);
+  }
+
+  public async ValueTask DisposeAsync()
+  {
+    if (_disposed)
+    {
+      return;
+    }
+
+    ThemeService.ThemeChanged -= HandleThemeChanged;
+    _disposed = true;
+    await Task.CompletedTask;
+  }
+}

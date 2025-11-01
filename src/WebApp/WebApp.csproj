@@ -22,6 +22,7 @@
     <PackageReference Include="Flowbite" Version="[0.0.12-alpha,)" />
     <PackageReference Include="Flowbite.ExtendedIcons" Version="[0.0.5-alpha,)" />
     <PackageReference Include="BlazorWasmPreRendering.Build" Version="5.0.0" />
+    <PackageReference Include="Blazor-ApexCharts" Version="6.0.2" />
   </ItemGroup>
 
   <Target Name="TailwindBuild" BeforeTargets="Build" Condition="'$(OS)'=='Windows_NT'">

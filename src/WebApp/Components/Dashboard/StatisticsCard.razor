@@ -1,0 +1,139 @@
+@using System.Globalization
+
+<Card Size="CardSize.ExtraLarge" class="@($"flex max-w-none flex-col shadow-sm p-4 sm:p-5 {CardClass}")">
+  <div class="mb-3 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">@Title</h3>
+      <button type="button"
+              class="rounded-full p-1 text-gray-400 transition hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300">
+        <span class="sr-only">Show information</span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             fill="currentColor"
+             viewBox="0 0 24 24"
+             class="h-4 w-4">
+          <path clip-rule="evenodd"
+                fill-rule="evenodd"
+                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.008-3.018a1.502 1.502 0 0 1 2.522 1.159v.024a1.44 1.44 0 0 1-1.493 1.418 1 1 0 0 0-1.037.999V14a1 1 0 1 0 2 0v-.539a3.44 3.44 0 0 0 2.529-3.256 3.502 3.502 0 0 0-7-.255 1 1 0 0 0 2 .076c.014-.398.187-.774.48-1.044Zm.982 7.026a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2h-.01Z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="flex divide-x divide-gray-200 rounded-t-lg shadow-sm dark:divide-gray-700">
+    <button type="button"
+            role="tab"
+            aria-selected="@(_activeTab == StatisticsTab.Products)"
+            class="@GetTabButtonClass(StatisticsTab.Products)"
+            @onclick="() => SetTab(StatisticsTab.Products)">
+      Top products
+    </button>
+    <button type="button"
+            role="tab"
+            aria-selected="@(_activeTab == StatisticsTab.Customers)"
+            class="@GetTabButtonClass(StatisticsTab.Customers)"
+            @onclick="() => SetTab(StatisticsTab.Customers)">
+      Top customers
+    </button>
+  </div>
+  <div class="h-px bg-gray-200 dark:bg-gray-700"></div>
+
+  <div class="mt-3 rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
+    @if (_activeTab == StatisticsTab.Products)
+    {
+      <ul class="-m-3 divide-y divide-gray-200 dark:divide-gray-700">
+        @foreach (var product in Products ?? Array.Empty<ProductStatistic>())
+        {
+          <li class="py-3 sm:py-4">
+            <div class="flex items-center justify-between">
+              <div class="flex min-w-0 items-center">
+                <img class="h-10 w-10 flex-shrink-0"
+                     src="@product.ImageUrl"
+                     alt="@product.Name" />
+                <div class="ml-3">
+                  <p class="truncate font-medium text-gray-900 dark:text-white">@product.Name</p>
+                  <div class="ml-px text-sm">
+                    <span class="@GetChangeClass(product.ChangePercent)">
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           fill="none"
+                           viewBox="0 0 24 24"
+                           class="mr-1 inline h-3 w-3"
+                           aria-hidden="true">
+                        <path stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="@(product.ChangePercent >= 0 ? "M12 19V5m0 0-4 4m4-4 4 4" : "M12 5v14m0 0-4-4m4 4 4-4")" />
+                      </svg>
+                      @FormatChange(product.ChangePercent)
+                    </span>
+                    <span class="ml-1 text-gray-300 dark:text-gray-400">vs last month</span>
+                  </div>
+                </div>
+              </div>
+              <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                @FormatCurrency(product.Revenue)
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+    else
+    {
+      <ul class="-m-3 divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+        @foreach (var customer in Customers ?? Array.Empty<CustomerStatistic>())
+        {
+          <li class="py-3 sm:py-3.5">
+            <div class="flex items-center justify-between">
+              <div class="flex min-w-0 items-center">
+                <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-100 object-cover dark:bg-gray-600"
+                     src="@customer.ImageUrl"
+                     alt="@customer.Name" />
+                <div class="ml-3">
+                  <p class="truncate font-medium text-gray-900 dark:text-white">@customer.Name</p>
+                  <span class="text-gray-500 dark:text-gray-400">@customer.Email</span>
+                </div>
+              </div>
+              <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                @FormatCurrency(customer.Spend)
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <div class="mt-3 flex items-center justify-between border-t border-gray-200 pt-3 sm:pt-5 dark:border-gray-700">
+    <button type="button"
+            class="inline-flex items-center gap-1 rounded-lg p-2 text-sm font-medium text-gray-500 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+      @PeriodLabel
+      <svg xmlns="http://www.w3.org/2000/svg"
+           fill="none"
+           viewBox="0 0 24 24"
+           class="h-5 w-5"
+           aria-hidden="true">
+        <path stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m8 10 4 4 4-4" />
+      </svg>
+    </button>
+    <a href="@ReportHref"
+       class="inline-flex items-center gap-2 rounded-lg p-2 text-xs font-medium uppercase text-primary-700 hover:bg-gray-100 dark:text-primary-400 dark:hover:bg-gray-700 sm:text-sm">
+      Full report
+      <svg xmlns="http://www.w3.org/2000/svg"
+           fill="none"
+           viewBox="0 0 24 24"
+           class="h-5 w-5"
+           aria-hidden="true">
+        <path stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m10 16 4-4-4-4" />
+      </svg>
+    </a>
+  </div>
+</Card>
