@@ -1,5 +1,6 @@
 @page "/grid"
 
+@using QuickGridAlign = Microsoft.AspNetCore.Components.QuickGrid.Align
 @inject PokemonService PokemonService
 
 <PageTitle>Grid</PageTitle>
@@ -8,7 +9,7 @@
 
 <div class="grid flowbite-grid text-xs">
     <QuickGrid Items="@FilteredPokemon" Theme="flowbite">
-        <PropertyColumn Property="@(p => p.Id)" Title="#" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Property="@(p => p.Id)" Title="#" Sortable="true" Align="QuickGridAlign.Center" />
         <PropertyColumn Property="@(p => p.Name)" Title="Name" Sortable="true">
             <ColumnOptions>
                 <div class="search-box">
@@ -17,9 +18,9 @@
             </ColumnOptions>
         </PropertyColumn>
         <PropertyColumn Property="@(p => p.Type1)" Title="Type" Sortable="true" />
-        <PropertyColumn Property="@(p => p.HP)" Title="HP" Sortable="true" Align="Align.Center" />
-        <PropertyColumn Property="@(p => p.Attack)" Title="Attack" Sortable="true" Align="Align.Center" />
-        <PropertyColumn Property="@(p => p.Defense)" Title="Defense" Sortable="true" Align="Align.Center" />
+        <PropertyColumn Property="@(p => p.HP)" Title="HP" Sortable="true" Align="QuickGridAlign.Center" />
+        <PropertyColumn Property="@(p => p.Attack)" Title="Attack" Sortable="true" Align="QuickGridAlign.Center" />
+        <PropertyColumn Property="@(p => p.Defense)" Title="Defense" Sortable="true" Align="QuickGridAlign.Center" />
     </QuickGrid>
 </div>
 
