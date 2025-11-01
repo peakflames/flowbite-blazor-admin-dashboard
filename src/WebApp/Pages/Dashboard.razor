@@ -1,30 +1,39 @@
+@page "/"
 @page "/dashboard"
+
 
 <PageTitle>Dashboard</PageTitle>
 
-<div class="space-y-6">
+<div class="mt-px space-y-4">
   <section class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-    <ChartWidget Title="Sales this week"
-                 Subtitle="$45,385"
-                 ChangeValue="12.5m"
-                 ChangeCaption="vs last week"
-                 Series="RevenueSeries"
-                 IsDarkMode="_isDarkMode">
-      <FooterContent>
-        <div class="mt-4 flex flex-col gap-3 border-t border-gray-200 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:pt-6 dark:border-gray-700">
-          <div class="text-gray-500 dark:text-gray-300">
-            Updated 5 minutes ago
+    <div class="xl:col-span-2">
+      <ChartWidget Title="Sales this week"
+                   Subtitle="$45,385"
+                   ChangeValue="12.5m"
+                   ChangeCaption="vs last week"
+                   Series="RevenueSeries"
+                   IsDarkMode="_isDarkMode">
+        <FooterContent>
+          <div class="mt-4 flex flex-col gap-3 border-t border-gray-200 pt-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:pt-6 dark:border-gray-700">
+            <div class="text-gray-500 dark:text-gray-300">
+              Updated 5 minutes ago
+            </div>
+            <a href="#"
+               class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+              View reports →
+            </a>
           </div>
-          <a href="#"
-             class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
-            View reports →
-          </a>
-        </div>
-      </FooterContent>
-    </ChartWidget>
+        </FooterContent>
+      </ChartWidget>
+    </div>
+
+    <StatisticsCard Products="TopProducts"
+                    Customers="TopCustomers"
+                    PeriodLabel="Last 7 days"
+                    ReportHref="#" />
   </section>
 
-  <section class="grid grid-cols-1 gap-4 xl:grid-cols-3">
+  <section class="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
     <ProductMetricCard Title="New products"
                        Subtitle="2,340"
                        ChangeValue="12.5m"
@@ -51,7 +60,7 @@
                        IsDarkMode="_isDarkMode" />
   </section>
 
-  <section class="grid grid-cols-1 gap-4 xl:grid-cols-2">
+  <section class="grid grid-cols-1 gap-3 xl:grid-cols-2">
     <CategorySalesReport Title="Sales by category"
                          Subtitle="Desktop PC"
                          ChangeValue="2.5m"

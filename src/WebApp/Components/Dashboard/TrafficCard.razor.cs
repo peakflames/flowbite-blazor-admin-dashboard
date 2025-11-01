@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ApexCharts;
 using Microsoft.AspNetCore.Components;
 using WebApp.Charts;
@@ -23,6 +24,10 @@ public partial class TrafficCard : ComponentBase
 
   protected override void OnParametersSet()
   {
-    _options = DashboardChartOptions.CreateTrafficDonutOptions<NumericPoint>(IsDarkMode);
+    var primarySlice = Slices?.OrderByDescending(slice => slice.Value).FirstOrDefault();
+    var centerLabel = primarySlice?.Category ?? Subtitle;
+    var centerValue = primarySlice is null ? null : $"{primarySlice.Value:0.#}%";
+
+    _options = DashboardChartOptions.CreateTrafficDonutOptions<NumericPoint>(IsDarkMode, centerLabel, centerValue);
   }
 }

@@ -9,13 +9,14 @@ public static class DashboardChartOptions
   public const string FontFamily = "Inter, sans-serif";
   private const string AxisColorLight = "#4B5563";
   private const string AxisColorDark = "#9CA3AF";
-  private const string ChartBorderLight = "#F3F4F6";
-  private const string ChartBorderDark = "#374151";
-  private const string PrimaryHighlight = "#EF562F";
-  private const string SecondaryHighlight = "#FDBA8C";
-  private const string AccentTeal = "#16BDCA";
-  private const string AccentCyan = "#17B0BD";
-  private const string AccentBlue = "#1A56DB";
+  private const string ChartBorderLight = "#E5E7EB";
+  private const string ChartBorderDark = "#1F2937";
+  private const string PrimaryHighlight = "#1A56DB";
+  private const string SecondaryHighlight = "#3B82F6";
+  private const string AccentTeal = "#0EA5E9";
+  private const string AccentCyan = "#38BDF8";
+  private const string AccentNavy = "#1E3A8A";
+  private const string AccentIndigo = "#312E81";
 
   private static readonly string[] RevenueCategoryValues =
   {
@@ -32,10 +33,10 @@ public static class DashboardChartOptions
   {
     PrimaryHighlight,
     SecondaryHighlight,
-    AccentBlue,
+    AccentCyan,
     AccentTeal,
-    "#0E7490",
-    "#312E81"
+    AccentNavy,
+    AccentIndigo
   };
 
   private static readonly string[] LightBarBackgroundValues =
@@ -93,9 +94,22 @@ public static class DashboardChartOptions
         FontFamily = FontFamily,
         FontSize = "14px",
         FontWeight = 500,
+        HorizontalAlign = Align.Left,
         Labels = new LegendLabels
         {
           Colors = baseAxisColor
+        },
+        Markers = new LegendMarkers
+        {
+          Width = 12,
+          Height = 12,
+          Radius = 12,
+          OffsetX = -2,
+          OffsetY = -1
+        },
+        ItemMargin = new LegendItemMargin
+        {
+          Horizontal = 12
         }
       }
     };
@@ -119,6 +133,11 @@ public static class DashboardChartOptions
           Show = false
         }
       },
+      Stroke = new Stroke
+      {
+        Curve = Curve.Smooth,
+        Width = new Size(4)
+      },
       Fill = new Fill
       {
         Type = FillType.Gradient,
@@ -126,10 +145,10 @@ public static class DashboardChartOptions
         {
           Shade = GradientShade.Light,
           Type = GradientType.Vertical,
-          ShadeIntensity = 0.5,
+          ShadeIntensity = 0.9,
           OpacityFrom = colors.OpacityFrom,
           OpacityTo = colors.OpacityTo,
-          Stops = new List<double> { 0, 100 }
+          Stops = new List<double> { 0, 85, 100 }
         }
       },
       DataLabels = new DataLabels
@@ -138,6 +157,8 @@ public static class DashboardChartOptions
       },
       Tooltip = new Tooltip
       {
+        Shared = true,
+        Intersect = false,
         Style = new TooltipStyle
         {
           FontFamily = FontFamily,
@@ -148,17 +169,19 @@ public static class DashboardChartOptions
       {
         Show = true,
         BorderColor = colors.BorderColor,
-        StrokeDashArray = 1,
+        StrokeDashArray = 4,
         Padding = new Padding
         {
-          Left = 35,
+          Left = 25,
+          Right = 15,
           Bottom = 15
         }
       },
       Markers = new Markers
       {
-        Size = new Size(5),
-        StrokeColors = "#ffffff",
+        Size = new Size(6),
+        StrokeColors = isDarkMode ? "#111827" : "#ffffff",
+        StrokeWidth = new Size(2),
         Hover = new MarkersHover
         {
           SizeOffset = 3
@@ -223,9 +246,17 @@ public static class DashboardChartOptions
         {
           Colors = colors.LabelColor
         },
+        Markers = new LegendMarkers
+        {
+          Width = 12,
+          Height = 12,
+          Radius = 12,
+          OffsetX = -2,
+          OffsetY = -1
+        },
         ItemMargin = new LegendItemMargin
         {
-          Horizontal = 10
+          Horizontal = 14
         }
       },
       Responsive = new List<Responsive<TItem>>
@@ -256,6 +287,7 @@ public static class DashboardChartOptions
     return new ApexChartOptions<TItem>
     {
       Chart = CreateBarChart(140, isDarkMode),
+      Colors = new List<string> { PrimaryHighlight },
       PlotOptions = new PlotOptions
       {
         Bar = new PlotOptionsBar
@@ -359,7 +391,7 @@ public static class DashboardChartOptions
     };
   }
 
-  public static ApexChartOptions<TItem> CreateTrafficDonutOptions<TItem>(bool isDarkMode)
+  public static ApexChartOptions<TItem> CreateTrafficDonutOptions<TItem>(bool isDarkMode, string? centerLabel = null, string? centerValue = null)
     where TItem : class
   {
     var tooltip = CreateTooltip(shared: true, intersect: false);
@@ -376,6 +408,12 @@ public static class DashboardChartOptions
       Formatter = "function (value) { return value + '%'; }"
     };
 
+    var resolvedLabel = string.IsNullOrWhiteSpace(centerLabel) ? "Top device" : centerLabel;
+    var resolvedValue = string.IsNullOrWhiteSpace(centerValue) ? string.Empty : centerValue;
+    var jsLabel = resolvedLabel.Replace("'", "\\'");
+    var jsValue = resolvedValue.Replace("'", "\\'");
+    var labelColor = isDarkMode ? "#F9FAFB" : "#111827";
+
     return new ApexChartOptions<TItem>
     {
       Chart = new Chart
@@ -386,10 +424,49 @@ public static class DashboardChartOptions
         ForeColor = isDarkMode ? AxisColorDark : AxisColorLight,
         Toolbar = new Toolbar { Show = false }
       },
-      Colors = new List<string> { AccentTeal, SecondaryHighlight, AccentBlue },
+      Colors = new List<string> { PrimaryHighlight, AccentTeal, SecondaryHighlight },
+      PlotOptions = new PlotOptions
+      {
+        Pie = new PlotOptionsPie
+        {
+          Donut = new PlotOptionsDonut
+          {
+            Size = "70%",
+            Labels = new DonutLabels
+            {
+              Show = true,
+              Name = new DonutLabelName
+              {
+                Show = true,
+                OffsetY = 10,
+                Color = labelColor,
+                FontFamily = FontFamily,
+                FontSize = "16px",
+                FontWeight = 500,
+                Formatter = $"function (w) {{ return '{jsLabel}'; }}"
+              },
+              Value = new DonutLabelValue
+              {
+                Show = true,
+                OffsetY = -8,
+                Color = labelColor,
+                FontFamily = FontFamily,
+                FontSize = "28px",
+                FontWeight = 700,
+                Formatter = $"function (w) {{ return '{jsValue}'; }}"
+              },
+              Total = new DonutLabelTotal
+              {
+                Show = false
+              }
+            }
+          }
+        }
+      },
       Stroke = new Stroke
       {
-        Colors = new List<string> { isDarkMode ? "#1f2937" : "#ffffff" }
+        Colors = new List<string> { isDarkMode ? "#111827" : "#ffffff" },
+        Width = new Size(2)
       },
       States = CreateHoverDarkenState(),
       Tooltip = tooltip,
@@ -472,8 +549,8 @@ public static class DashboardChartOptions
   private static MainChartColors GetMainChartColors(bool isDarkMode)
   {
     return isDarkMode
-      ? new MainChartColors(ChartBorderDark, AxisColorDark, 0.0, 0.15)
-      : new MainChartColors(ChartBorderLight, AxisColorLight, 0.45, 0.0);
+      ? new MainChartColors(ChartBorderDark, AxisColorDark, 0.35, 0.05)
+      : new MainChartColors(ChartBorderLight, AxisColorLight, 0.6, 0.1);
   }
 
   private readonly record struct MainChartColors(string BorderColor, string LabelColor, double OpacityFrom, double OpacityTo);

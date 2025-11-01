@@ -71,6 +71,29 @@ Additional factories (`thinfillbars.ts`, `thinstackbars.ts`) provide monochrome 
 - `src/WebApp/Components/Dashboard/ThemeObserver.razor` lives in `MainLayout` to initialize the observer, and invokes `IApexChartService.SetGlobalOptionsAsync` with `DashboardChartOptions.CreateGlobalDefaults(isDark)` so every chart inherits palette updates.
 - Per-page consumers (e.g., `Pages/Dashboard.razor(.cs)`) subscribe to `ThemeService` to re-evaluate chart option factories when the theme flips, keeping local chart instances in sync with the global Apex configuration.
 
+## QA & Verification Plan
+- Launch `dotnet watch --non-interactive` from `src/WebApp` and browse to `/dashboard`; compare colors, spacing, and legend ordering against <https://flowbite-svelte.com/admin-dashboard/dashboard>.
+- Toggle the theme switch in the navbar and confirm that all charts update palettes (area gradient, monochrome bars, donut stroke) without a full page reload.
+- Exercise responsive breakpoints (1024px and 430px) to ensure the area chart hides x-axis labels and the donut chart height matches the Svelte layout.
+- Execute the Playwright smoke suite once the dashboard route is wired into the automation harness; capture baseline screenshots for future regressions. (Latest capture: `docs/references/dashboard-20251102.png`)
+- Record any visual or behavioral gaps back in this document before marking the checklist item as complete.
+
+### Playwright Baseline (2025‑11‑02)
+- Stored new dark-theme dashboard capture at `docs/references/dashboard-20251102.png` (blue palette revenue + donut center labels).
+
+### QA Comparison Notes (2025‑11‑01)
+- Layout parity: Blazor dashboard currently renders only the four primary chart cards; Svelte reference includes additional widgets (chat, stats tabs, insights carousel, transactions table). These need to be ported or consciously omitted with documentation.
+- Chart palette / styling:
+  - Revenue area chart now renders the intentional blue gradient with smoothed strokes and custom legend markers. Remaining difference: Svelte reference uses orange/red theme.
+  - Product/User bar cards pick up the blue accent palette. Verify spacing/column width against reference once additional widgets land.
+  - Category sales grouped bars use blue palette but still need spacing review versus Svelte.
+  - Donut chart now shows a center device/value label; segmented legend pills from Svelte remain unimplemented.
+- Typography/layout: Card padding and typography weights differ (e.g., Svelte area card includes subtitle and change pill aligned left). Align Tailwind classes to match.
+- Card padding: Blazor cards have more interior padding than the Svelte widgets; trim spacing to match the tighter reference layout.
+- Call-to-action footer content: Svelte cards include “Date range selector”, “More” links, and icon buttons that are absent (or placeholder text) in Blazor port.
+- Dark-mode behavior validated; palette flips with navbar toggle. Need to ensure light theme also matches.
+- Action Items: Port remaining dashboard components (Stats, Activity, Chat, Insights, Transactions), refine chart options per widget, add missing legends/tooltips, and align card footers with Flowbite Svelte markup.
+
 ## To-Do Checklist
 - [x] Inventory every Flowbite chart instance and its option factory.
 - [x] Add Blazor-ApexCharts service registration with default palette/theme.

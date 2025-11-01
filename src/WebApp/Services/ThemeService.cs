@@ -30,7 +30,7 @@ public sealed class ThemeService : IAsyncDisposable
 
     var module = await _moduleTask.Value;
     _dotNetRef ??= DotNetObjectReference.Create(this);
-    _isDarkMode = await module.InvokeAsync<bool>("flowbiteThemeObserver.start", _dotNetRef);
+    _isDarkMode = await module.InvokeAsync<bool>("start", _dotNetRef);
     _isInitialized = true;
     return _isDarkMode;
   }
@@ -55,7 +55,7 @@ public sealed class ThemeService : IAsyncDisposable
       try
       {
         var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("flowbiteThemeObserver.stop");
+        await module.InvokeVoidAsync("stop");
       }
       catch
       {

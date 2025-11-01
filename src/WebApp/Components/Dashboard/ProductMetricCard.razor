@@ -1,13 +1,13 @@
 @using ApexCharts
 
-<Card Size="CardSize.ExtraLarge" class="@($"flex items-center justify-between gap-4 p-4 sm:p-6 shadow-sm {CardClass}")">
+<Card Size="CardSize.ExtraLarge" class="@($"flex items-center justify-between gap-4 shadow-sm {CardClass}")">
   <div class="w-full">
     <h5 class="text-sm font-medium text-gray-500 dark:text-gray-300">@Title</h5>
     <p class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">@Subtitle</p>
 
     @if (ShowChangeIndicator)
     {
-      <div class="@($"mt-2 inline-flex items-baseline gap-2 text-sm {ChangeCss}")">
+      <div class="@($"mt-2 inline-flex items-baseline gap-1.5 text-sm {ChangeCss}")">
         <span class="font-semibold">@FormattedChange</span>
         @if (!string.IsNullOrWhiteSpace(ChangeCaption))
         {
@@ -17,7 +17,7 @@
     }
   </div>
 
-  <div class="w-full max-w-[180px] lg:max-w-[200px]">
+  <div class="w-full min-h-[115px]">
     <ApexChart @ref="_chart"
                TItem="NumericPoint"
                Options="_options"
@@ -28,9 +28,9 @@
         {
           <ApexPointSeries TItem="NumericPoint"
                            Items="series.Points"
-                           Name="series.Name"
+                           Name="@series.Name"
                            SeriesType="SeriesType.Bar"
-                           Color="series.Color"
+                           Color="@series.Color"
                            XValue="p => p.Category"
                            YValue="p => p.Value" />
         }
