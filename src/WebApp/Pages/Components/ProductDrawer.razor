@@ -1,0 +1,201 @@
+@page "/components/productdrawer"
+@using Flowbite.Components
+@using Flowbite.Icons
+
+<PageTitle>Product Drawer</PageTitle>
+
+<div class="space-y-6 px-4 pb-6 pt-4 dark:bg-gray-900">
+  <h1 class="hidden">Components: Product Drawer</h1>
+
+  <div class="mx-auto flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Product Management</h2>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
+        Manage templates and create new products with the drawer workflow.
+      </p>
+    </div>
+
+    <Button Color="ButtonColor.Primary"
+            Size="ButtonSize.Small"
+            Class="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-600"
+            OnClick="@OpenAddProduct">
+      <PlusIcon />
+      Add New Product
+    </Button>
+  </div>
+
+  <div class="mx-auto w-full space-y-6">
+    <section class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <h3 class="mb-3 text-sm font-semibold uppercase text-gray-500 dark:text-gray-400">Quick Templates:</h3>
+      <div class="flex flex-wrap gap-2">
+        <Button Size="ButtonSize.Small"
+                Color="ButtonColor.Green"
+                Class="rounded-lg border-0 bg-lime-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-600 focus:ring-4 focus:ring-lime-200 dark:focus:ring-lime-400"
+                OnClick="@OpenSmartphoneAppleTemplate">
+          iPhone Template
+        </Button>
+        <Button Size="ButtonSize.Small"
+                Color="ButtonColor.Primary"
+                Class="rounded-lg border-0 bg-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-400"
+                OnClick="@OpenSmartphoneSamsungTemplate">
+          Samsung Phone
+        </Button>
+        <Button Size="ButtonSize.Small"
+                Color="ButtonColor.Purple"
+                Class="rounded-lg border-0 bg-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-600 focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-400"
+                OnClick="@OpenLaptopAppleTemplate">
+          MacBook Template
+        </Button>
+      </div>
+    </section>
+
+    <section class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+      <Table Hoverable="true">
+        <TableHead class="bg-gray-50 dark:bg-gray-900">
+          <TableRow>
+            <TableHeadCell>Name</TableHeadCell>
+            <TableHeadCell>Price</TableHeadCell>
+            <TableHeadCell>Brand</TableHeadCell>
+            <TableHeadCell>Category</TableHeadCell>
+            <TableHeadCell>Discount</TableHeadCell>
+            <TableHeadCell>Actions</TableHeadCell>
+          </TableRow>
+        </TableHead>
+        <TableBody class="divide-y divide-gray-200 dark:divide-gray-700">
+          @foreach (var product in Products)
+          {
+            <TableRow class="text-sm text-gray-600 dark:text-gray-300">
+              <TableCell class="font-medium text-gray-900 dark:text-white">
+                @product.Name
+              </TableCell>
+              <TableCell>
+                @($"${product.Price}")
+              </TableCell>
+              <TableCell class="uppercase tracking-wide">
+                @product.Technology
+              </TableCell>
+              <TableCell class="uppercase tracking-wide">
+                @product.Category
+              </TableCell>
+              <TableCell>
+                @(string.IsNullOrWhiteSpace(product.Discount) ? "None" : $"{product.Discount}%")
+              </TableCell>
+              <TableCell class="space-x-3">
+                <button type="button"
+                        class="text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300"
+                        @onclick="() => EditProduct(product)">
+                  Edit
+                </button>
+                <button type="button"
+                        class="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300"
+                        @onclick="() => DuplicateProduct(product)">
+                  Duplicate
+                </button>
+                <button type="button"
+                        class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
+                        @onclick="() => DeleteProduct(product.Id)">
+                  Delete
+                </button>
+              </TableCell>
+            </TableRow>
+          }
+        </TableBody>
+      </Table>
+    </section>
+  </div>
+</div>
+
+<Drawer Show="@_isDrawerOpen"
+        OnClose="@CloseDrawer"
+        Position="DrawerPosition.Right">
+  <DrawerHeader>
+    <span class="text-sm font-semibold uppercase text-gray-600 dark:text-gray-300">
+      @_drawerTitle
+    </span>
+  </DrawerHeader>
+  <DrawerItems>
+    <EditForm Model="_formModel"
+              OnValidSubmit="@HandleValidSubmit">
+      <DataAnnotationsValidator />
+      <ValidationSummary />
+
+      <div class="relative space-y-4 pb-28">
+        <div class="space-y-2">
+          <Label For="product-name" Value="Name" />
+          <TextInput Id="product-name"
+                     Placeholder="Type product name"
+                     @bind-Value="_formModel.Name"
+                     Required="true" />
+        </div>
+
+        <div class="space-y-2">
+          <Label For="product-price" Value="Price" />
+          <TextInput Id="product-price"
+                     Placeholder="2999"
+                     @bind-Value="_formModel.Price"
+                     Required="true" />
+        </div>
+
+        <div class="space-y-2">
+          <Label For="product-technology" Value="Technology/Brand" />
+          <Select Id="product-technology"
+                  @bind-Value="_formModel.Technology">
+            <option value="">Choose brand</option>
+            @foreach (var option in TechnologyOptions)
+            {
+              <option value="@option.Value">@option.Label</option>
+            }
+          </Select>
+        </div>
+
+        <div class="space-y-2">
+          <Label For="product-category" Value="Category" />
+          <Select Id="product-category"
+                  @bind-Value="_formModel.Category">
+            <option value="">Choose category</option>
+            @foreach (var option in CategoryOptions)
+            {
+              <option value="@option.Value">@option.Label</option>
+            }
+          </Select>
+        </div>
+
+        <div class="space-y-2">
+          <Label For="product-discount" Value="Discount" />
+          <Select Id="product-discount"
+                  @bind-Value="_formModel.Discount">
+            <option value="">No discount</option>
+            @foreach (var option in DiscountOptions)
+            {
+              <option value="@option.Value">@option.Label</option>
+            }
+          </Select>
+        </div>
+
+        <div class="space-y-2">
+          <Label For="product-description" Value="Description" />
+          <Textarea Id="product-description"
+                    Rows="4"
+                    Placeholder="Enter product description"
+                    @bind-Value="_formModel.Description" />
+        </div>
+
+        <div class="bottom-0 left-0 mt-6 flex w-full flex-col gap-3 border-t border-gray-200 bg-white/95 py-4 dark:border-gray-700 dark:bg-gray-800/95 md:absolute md:flex-row md:items-center md:justify-end md:gap-2 md:px-4">
+          <Button Type="ButtonType.Submit"
+                  Color="ButtonColor.Primary"
+                  Size="ButtonSize.Small"
+                  Class="w-full gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm sm:w-auto">
+            @_submitLabel
+          </Button>
+          <Button Type="ButtonType.Button"
+                  Color="ButtonColor.Light"
+                  Size="ButtonSize.Small"
+                  Class="w-full gap-2 rounded-lg px-4 py-2 text-sm font-semibold"
+                  OnClick="@CloseDrawer">
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </EditForm>
+  </DrawerItems>
+</Drawer>
