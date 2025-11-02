@@ -14,6 +14,11 @@ public partial class Dashboard : IDisposable
   [Inject] private ThemeService ThemeService { get; set; } = default!;
 
   private bool _isDarkMode;
+  [Parameter]
+  public string PageTitleText { get; set; } = "Dashboard";
+
+  [Parameter]
+  public bool RenderPageTitle { get; set; } = true;
   private static class Palette
   {
     public const string Primary = "#1A56DB";
