@@ -89,10 +89,21 @@ Additional factories (`thinfillbars.ts`, `thinstackbars.ts`) provide monochrome 
   - Category sales grouped bars use blue palette but still need spacing review versus Svelte.
   - Donut chart now shows a center device/value label; segmented legend pills from Svelte remain unimplemented.
 - Typography/layout: Card padding and typography weights differ (e.g., Svelte area card includes subtitle and change pill aligned left). Align Tailwind classes to match.
-- Card padding: Blazor cards have more interior padding than the Svelte widgets; trim spacing to match the tighter reference layout.
+- Card padding: Flowbite Blazor `Card` already injects interior padding; ensure dashboard components rely on default spacing (avoid redundant `p-*` classes).
 - Call-to-action footer content: Svelte cards include “Date range selector”, “More” links, and icon buttons that are absent (or placeholder text) in Blazor port.
 - Dark-mode behavior validated; palette flips with navbar toggle. Need to ensure light theme also matches.
 - Action Items: Port remaining dashboard components (Stats, Activity, Chat, Insights, Transactions), refine chart options per widget, add missing legends/tooltips, and align card footers with Flowbite Svelte markup.
+
+### Outstanding Dashboard Widgets (gap audit 2025‑11‑02)
+- **Smart chat panel** — threaded conversation with avatars, status chips, and reply CTA sitting below the product/user cards. Requires stacked message list with timestamps, quick action buttons, and Flowbite icon buttons.
+- **Statistics tab card parity** — Top customers tab missing inline avatars and email text styles in Blazor; ensure tabs share the same hover/focus behavior and bottom CTA (Last 7 days selector + Full report link).
+- **Sales by category controls** — Svelte version includes category dropdown and segmented legend filter chips; replicate selector UI above the grouped bar chart.
+- **Traffic donut legend** — Implement colored legend pills with percentages alongside the donut (currently omitted in Blazor).
+- **Latest activity timeline** — Vertical list of project updates with avatars, badges, progress text.
+- **Insights carousel** — Slide deck with cards (conversion metrics, call-to-actions) using Flowbite carousel component.
+- **Transactions table** — Paginated/payment table with status badges, avatar columns, and sticky header footer actions.
+- **Global layout adjustments** — Reduce inter-card spacing to match Svelte grid density; verify sidebar toggle and topbar icons alignment.
+- **Footer CTAs** — Reinstate footer buttons/links on charts (date range selectors, “More” actions) and ensure iconography matches.
 
 ## To-Do Checklist
 - [x] Inventory every Flowbite chart instance and its option factory.

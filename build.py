@@ -181,7 +181,7 @@ def run_dotnet_command(dotnet_path: str, command: str) -> None:
         if command == "publish":
             print("Publishing project to ./dist...")
             subprocess.run(
-                [dotnet_path, "publish", PROJECT_PATH, "-c", "Release", "-o", "dist"],
+                [dotnet_path, "publish", PROJECT_PATH, "-c", "Release", "-o", "dist", "-v", "diag"],
                 check=True
             )
             print("Successfully published to ./dist")

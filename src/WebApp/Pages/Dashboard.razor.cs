@@ -31,11 +31,18 @@ public partial class Dashboard : IDisposable
   private IReadOnlyList<ProductStatistic> TopProducts { get; set; } = Array.Empty<ProductStatistic>();
   private IReadOnlyList<CustomerStatistic> TopCustomers { get; set; } = Array.Empty<CustomerStatistic>();
 
-  protected override async Task OnInitializedAsync()
+  protected override void OnInitialized()
   {
-    _isDarkMode = await ThemeService.InitializeAsync();
-    ThemeService.ThemeChanged += HandleThemeChanged;
     BuildSeries();
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      _isDarkMode = await ThemeService.InitializeAsync();
+      ThemeService.ThemeChanged += HandleThemeChanged;
+    }
   }
 
   private void BuildSeries()
