@@ -235,9 +235,9 @@ public sealed class PricingService
 
         return new PricingPageData(
             Path: "/pages/pricing",
-            Title: "Flowbite Svelte Admin Dashboard - Pricing",
+            Title: "Flowbite Blazor Admin Dashboard - Pricing",
             Subtitle: "Pricing",
-            Description: "Pricing example - Flowbite Svelte Admin Dashboard",
+            Description: "Pricing example - Flowbite Blazor Admin Dashboard",
             HeroTitle: "Our pricing plan made simple",
             HeroLeadingText: "All types of businesses need access to development resources, so we give you the option to decide how much you need to use.",
             Plans: plans,
@@ -245,8 +245,8 @@ public sealed class PricingService
             Faqs: faqs,
             FooterMenus: footerMenus,
             Brand: new FooterBrand(
-                Name: "Flowbite",
-                Href: "https://flowbite.com",
+                Name: "Flowbite Blazor",
+                Href: "https://flowbite-blazor.org",
                 Src: "/favicon.png",
                 Alt: "Flowbite Logo"),
             FooterDescription: footerDescription);
