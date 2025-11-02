@@ -26,7 +26,6 @@ static void ConfigureServices(IServiceCollection services, string baseAddress)
     options.GlobalOptions = DashboardChartOptions.CreateGlobalDefaults(false);
   });
   services.AddScoped<ThemeService>();
-  services.AddScoped<PokemonService>();
   services.AddScoped<SettingsService>();
   services.AddScoped<PricingService>();
 }
