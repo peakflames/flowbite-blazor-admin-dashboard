@@ -35,7 +35,7 @@ The build script automatically handles:
 
 ## Contributing
 
-For detailed setup instructions, development workflows, and contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+For detailed setup instructions, development workflows, and contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.md). For a concise overview of project layout and collaboration standards, read [AGENTS.md](AGENTS.md) (Repository Guidelines).
 
 ## License
 
