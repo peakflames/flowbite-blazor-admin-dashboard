@@ -8,7 +8,7 @@
     <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
     <PostCSSConfig>postcss.config.js</PostCSSConfig>
     <TailwindConfig>tailwind.config.js</TailwindConfig>
-    <Version>0.0.1-alpha.1</Version>
+    <Version>0.0.2-alpha.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
