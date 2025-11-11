@@ -39,7 +39,7 @@ public partial class ProductMetricCard : ComponentBase
     _ => "text-gray-500 dark:text-gray-400"
   };
 
-  private string ChartHeight => ChartType == ProductMetricChartType.Quantity ? "150" : "140";
+  private string ChartHeight => "140";
 
   protected override void OnParametersSet()
   {
