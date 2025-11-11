@@ -125,21 +125,25 @@
       </ActionContent>
 
       <ChildContent>
-        <Timeline Order="TimelineOrder.Activity">
+        <Timeline Order="TimelineOrder.Vertical">
           <TimelineItem Title="Application UI design in Figma"
                         Date="April 2025">
-            <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-300">
-              Get access to over 20+ pages including a dashboard layout, charts, kanban board, calendar, and pre-order E-commerce &amp; Marketing pages.
-            </p>
-            <Button Color="ButtonColor.Light" Size="ButtonSize.Small">
-              Learn more
-              <AngleRightIcon Class="ms-2 h-4 w-4" />
-            </Button>
+            <OrientationContent>
+                <span class="absolute -left-4 flex h-6 w-6 items-center justify-center rounded-full ring-8 ring-white dark:ring-gray-900 bg-primary-200 dark:bg-primary-900">
+                    <CalendarMonthIcon Class="h-4 w-4 text-primary-600 dark:text-primary-400" />
+                </span>
+            </OrientationContent>
+            <ChildContent>
+                <p>
+                    Get access to over 20+ pages including dashboards, kanban boards, calendars, and marketing layouts.
+                </p>
+            </ChildContent>
+            
           </TimelineItem>
 
           <TimelineItem Title="Marketing UI code in Flowbite"
                         Date="March 2025">
-            <p class="text-base font-normal text-gray-500 dark:text-gray-300">
+            <p>
               Get started with dozens of web components and interactive elements built on top of Tailwind CSS.
             </p>
             <a href="#top"
@@ -152,7 +156,7 @@
           <TimelineItem Title="Marketing UI design in Figma"
                         Date="February 2025"
                         IsLast="true">
-            <p class="text-base font-normal text-gray-500 dark:text-gray-300">
+            <p>
               Get started with dozens of web components and interactive elements built on top of Tailwind CSS.
             </p>
           </TimelineItem>
