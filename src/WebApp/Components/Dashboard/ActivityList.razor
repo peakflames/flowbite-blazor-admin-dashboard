@@ -1,9 +1,9 @@
-<Card Size="CardSize.ExtraLarge" class="@($"max-w-none shadow-sm {CardClass}")">
-  <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+<Card Size="CardSize.ExtraLarge" class="@($"w-full max-w-none shadow-sm {CardClass}")">
+  <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">@Title</h3>
     @if (ActionContent is not null)
     {
-      <div class="flex items-center gap-2 text-sm font-medium">
+      <div class="flex items-center gap-2">
         @ActionContent
       </div>
     }
