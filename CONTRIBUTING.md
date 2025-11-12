@@ -96,19 +96,19 @@ If you prefer to manually install Tailwind CSS instead of using the build script
 
 **macOS:**
 ```bash
-mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
+mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-macos-arm64 && chmod +x tailwindcss-macos-arm64 && mv tailwindcss-macos-arm64 tailwindcss && cd ../../..
 ```
 
 **Linux:**
 ```bash
-mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
+mkdir -p ./src/WebApp/tools && cd ./src/WebApp/tools && curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-linux-x64 && chmod +x tailwindcss-linux-x64 && mv tailwindcss-linux-x64 tailwindcss && cd ../../..
 ```
 
 **Windows (PowerShell):**
 ```powershell
 mkdir ./src/WebApp/tools -Force; `
 cd ./src/WebApp/tools; `
-Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.15/tailwindcss-windows-x64.exe" `
+Invoke-WebRequest -Uri "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/tailwindcss-windows-x64.exe" `
    -OutFile "tailwindcss.exe" `
    -UseBasicParsing ; `
 cd ../../..

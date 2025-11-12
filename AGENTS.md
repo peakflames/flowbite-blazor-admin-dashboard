@@ -15,13 +15,16 @@ Use the Python automation:
 Adhere to standard .NET style: `PascalCase` for components, classes, and public members; `camelCase` for locals and parameters. Razor markup and C# blocks use 2-space indentation throughout the repo. Prefer partial class code-behind (`.razor.cs`) for heavy logic so markup stays declarative. Tailwind utilities pair with Flowbite components—order classes from layout → spacing → typography for readability. Run `dotnet format src/WebApp/WebApp.csproj` before opening a PR.
 
 ## Testing Guidelines
-No automated test project ships yet. Before submitting, smoke-test dashboards with `python build.py watch` and confirm Tailwind rebuilds cleanly. When adding logic-heavy services, create or update unit tests in a future `tests/` project and run with `dotnet test`. Note manual verification in the PR until automated coverage is available.
+- No automated test project ships yet. Before submitting, smoke-test dashboards with `python build.py` and confirm Tailwind rebuilds cleanly.
+- Ensure `src/WebApp/wwwroot/css/app.min.css` is regenerated as part of builds and committed whenever component styles change.
 
 ## Commit & Pull Request Guidelines
 Follow the Conventional Commit pattern seen in history (`feat(scope): summary`, `fix(scope): summary`). Use present tense and choose scopes that map to folders or UI features (`settings`, `product-drawer`, etc.). PRs should link issues, describe the change and validation, and attach before/after screenshots or recordings for UI work. Request at least one maintainer review and wait for CI (if enabled) before merging.
 
 ## UI Assets & Theming Tips
 Tailwind config lives in `src/WebApp/tailwind.config.js`; PostCSS in `src/WebApp/postcss.config.js`. Place new icons, fonts, or sample data in `wwwroot` and reference them relatively. Bundle third-party JS or CSS through `wwwroot` and document new dependencies in the PR rationale.
+
+It is ULTRA IMPORTATNT to adhere to the Flowbite Design Style System as it is a Mobile first and good looking.
 
 ## Reference Data
 
@@ -56,3 +59,15 @@ Search for the Flowbite Svelte source in these locations:
 - `src/Flowbite/` — core component library.
 - `src/Flowbite.ExtendedIcons/` — optional icon packs.
 - `src/DemoApp/` — documentation playground; mirror every new component with a demo page.
+
+## Problem-Solving Approach
+1. Analyze and form a hypothesis before modifying code.
+2. Implement a focused fix and verify it.
+3. If the hypothesis fails, stop and surface findings instead of pivoting blindly.
+
+
+## Git Workflow
+- Branch from `develop`: `git checkout develop && git pull origin develop`.
+- Naming: `fix/issue-{id}-description`, `feature/issue-{id}-description`, or `enhancement/issue-{id}-description`.
+- Commit format: `{type}({scope}): {description}` (types: fix, feat, docs, style, refactor, test, chore). Reference issues with `Fixes #{number}` when applicable.
+- Ensure `src/WebApp/wwwroot/css/app.min.css` is committed if it has changed. It auto-generate by the WebApp.csproj build instructions.
