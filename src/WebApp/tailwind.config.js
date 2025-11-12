@@ -24,7 +24,14 @@ module.exports = {
         "md:space-x-8",
         "md:text-primary-700",
         "md:text-sm",
-        "md:w-auto"
+        "md:w-auto",
+        "h-56",
+        "sm:h-64",
+        "xl:h-80",
+        "2xl:h-96",
+        "z-10",
+        "opacity-0",
+        "opacity-100"
     ],
     theme: {
         extend: {
