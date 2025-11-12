@@ -37,6 +37,7 @@ public partial class Dashboard : IDisposable
     private IReadOnlyList<ProductStatistic> TopProducts { get; set; } = Array.Empty<ProductStatistic>();
     private IReadOnlyList<CustomerStatistic> TopCustomers { get; set; } = Array.Empty<CustomerStatistic>();
     private IReadOnlyList<string> TransactionHeaders { get; set; } = Array.Empty<string>();
+    private List<TransactionEntry> AllTransactions { get; set; } = new();
     private IReadOnlyList<TransactionEntry> Transactions { get; set; } = Array.Empty<TransactionEntry>();
     private List<StatusFilterOption> StatusFilters { get; set; } = new();
     private List<DateRangeOption> DateRangeOptions { get; set; } = new();
@@ -180,37 +181,42 @@ public partial class Dashboard : IDisposable
       "Status"
     };
 
-        Transactions = new[]
-        {
-      new TransactionEntry("Payment from Bonnie Green", "Apr 23, 2021", "$2300", "0047568936", 475, PaymentBrand.Visa, TransactionStatus.Completed),
-      new TransactionEntry("Payment refund to #00910", "Apr 23, 2021", "-$670", "0078568936", 924, PaymentBrand.Mastercard, TransactionStatus.Completed),
-      new TransactionEntry("Payment failed from #087651", "Apr 18, 2021", "$234", "0088568934", 826, PaymentBrand.Mastercard, TransactionStatus.Cancelled),
-      new TransactionEntry("Payment from Lana Byrd", "Apr 15, 2021", "$5000", "0018568911", 634, PaymentBrand.Mastercard, TransactionStatus.InProgress),
-      new TransactionEntry("Payment from Jese Leos", "Apr 15, 2021", "$2300", "0045568939", 163, PaymentBrand.Visa, TransactionStatus.Completed),
-      new TransactionEntry("Refund to THEMESBERG LLC", "Apr 11, 2021", "-$560", "0031568935", 443, PaymentBrand.Visa, TransactionStatus.InReview),
-      new TransactionEntry("Payment from Lana Lysle", "Apr 6, 2021", "$1437", "0023568934", 223, PaymentBrand.Visa, TransactionStatus.InReview),
-      new TransactionEntry("Payment to Joseph Mcfall", "Apr 1, 2021", "$980", "0057568935", 362, PaymentBrand.Mastercard, TransactionStatus.Completed),
-      new TransactionEntry("Payment from Alphabet", "Mar 23, 2021", "$11,436", "00836143841", 772, PaymentBrand.Mastercard, TransactionStatus.InProgress),
-      new TransactionEntry("Payment from Bonnie Green", "Mar 23, 2021", "$560", "0031568935", 123, PaymentBrand.Visa, TransactionStatus.Completed)
+        AllTransactions = new List<TransactionEntry>
+    {
+      new("Payment from Bonnie Green", new DateTime(2021, 4, 23), "$2300", "0047568936", 475, PaymentBrand.Visa, TransactionStatus.Completed),
+      new("Payment refund to #00910", new DateTime(2021, 4, 23), "-$670", "0078568936", 924, PaymentBrand.Mastercard, TransactionStatus.Completed),
+      new("Payment failed from #087651", new DateTime(2021, 4, 18), "$234", "0088568934", 826, PaymentBrand.Mastercard, TransactionStatus.Cancelled),
+      new("Payment from Lana Byrd", new DateTime(2021, 4, 15), "$5000", "0018568911", 634, PaymentBrand.Mastercard, TransactionStatus.InProgress),
+      new("Payment from Jese Leos", new DateTime(2021, 4, 15), "$2300", "0045568939", 163, PaymentBrand.Visa, TransactionStatus.Completed),
+      new("Refund to THEMESBERG LLC", new DateTime(2021, 4, 11), "-$560", "0031568935", 443, PaymentBrand.Visa, TransactionStatus.InReview),
+      new("Payment from Lana Lysle", new DateTime(2021, 4, 6), "$1437", "0023568934", 223, PaymentBrand.Visa, TransactionStatus.InReview),
+      new("Payment to Joseph Mcfall", new DateTime(2021, 4, 1), "$980", "0057568935", 362, PaymentBrand.Mastercard, TransactionStatus.Completed),
+      new("Payment from Alphabet", new DateTime(2021, 3, 23), "$11,436", "00836143841", 772, PaymentBrand.Mastercard, TransactionStatus.InProgress),
+      new("Payment from Bonnie Green", new DateTime(2021, 3, 23), "$560", "0031568935", 123, PaymentBrand.Visa, TransactionStatus.Completed)
     };
 
         StatusFilters = new List<StatusFilterOption>
     {
-      new("Completed", TransactionStatus.Completed, false, 56),
-      new("Cancelled", TransactionStatus.Cancelled, true, 56),
-      new("In progress", TransactionStatus.InProgress, false, 56),
-      new("In review", TransactionStatus.InReview, true, 97)
+      new("Completed", TransactionStatus.Completed, true, CountByStatus(AllTransactions, TransactionStatus.Completed)),
+      new("Cancelled", TransactionStatus.Cancelled, true, CountByStatus(AllTransactions, TransactionStatus.Cancelled)),
+      new("In progress", TransactionStatus.InProgress, true, CountByStatus(AllTransactions, TransactionStatus.InProgress)),
+      new("In review", TransactionStatus.InReview, true, CountByStatus(AllTransactions, TransactionStatus.InReview))
     };
 
         DateRangeOptions = new List<DateRangeOption>
     {
-      new("Yesterday", -1),
-      new("Today", 0),
-      new("Last 7 days", 7),
-      new("Last 30 days", 30),
-      new("Last 90 days", 90)
+      new("Yesterday", anchor =>
+      {
+        var day = anchor.AddDays(-1);
+        return (day, day);
+      }),
+      new("Today", anchor => (anchor, anchor)),
+      new("Last 7 days", anchor => (anchor.AddDays(-6), anchor)),
+      new("Last 30 days", anchor => (anchor.AddDays(-29), anchor)),
+      new("Last 90 days", anchor => (anchor.AddDays(-89), anchor))
     };
         SelectedDateRange = DateRangeOptions.FirstOrDefault(option => option.Label == "Last 7 days") ?? DateRangeOptions.First();
+        ApplyFilters();
     }
 
     private static IReadOnlyList<NumericPoint> CreatePoints(IReadOnlyList<string> categories, IReadOnlyList<decimal> values)
@@ -241,7 +247,10 @@ public partial class Dashboard : IDisposable
     }
 
     private sealed record DeviceSummary(string Name, string Value, string ChangeText, string ChangeCss);
-    private sealed record TransactionEntry(string Name, string Date, string Amount, string ReferenceNumber, int PaymentSuffix, PaymentBrand Brand, TransactionStatus Status);
+    private sealed record TransactionEntry(string Name, DateTime OccurredOn, string Amount, string ReferenceNumber, int PaymentSuffix, PaymentBrand Brand, TransactionStatus Status)
+    {
+        public string DisplayDate => OccurredOn.ToString("MMM d, yyyy", CultureInfo.InvariantCulture);
+    }
 
     private sealed class StatusFilterOption
     {
@@ -259,7 +268,14 @@ public partial class Dashboard : IDisposable
         public int Count { get; }
     }
 
-    private sealed record DateRangeOption(string Label, int DaysBack);
+    private sealed record DateRangeOption(string Label, Func<DateTime, (DateTime Start, DateTime End)> ResolveRange)
+    {
+        public (DateTime Start, DateTime End) Resolve(DateTime anchor) => ResolveRange(anchor);
+    }
+
+    private DateTime DateAnchor => AllTransactions.Count > 0
+        ? AllTransactions.Max(transaction => transaction.OccurredOn).Date
+        : DateTime.Today;
 
     private static string GetStatusLabel(TransactionStatus status) => status switch
     {
@@ -279,7 +295,7 @@ public partial class Dashboard : IDisposable
         _ => "inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 dark:bg-gray-800 dark:text-gray-300"
     };
 
-    private static string GetDateRangeSummary(DateRangeOption option)
+    private string GetDateRangeSummary(DateRangeOption option)
     {
         var (start, end) = CalculateDateRange(option);
         var format = "MMM d, yyyy";
@@ -291,23 +307,53 @@ public partial class Dashboard : IDisposable
     private Task SelectDateRange(DateRangeOption option)
     {
         SelectedDateRange = option;
-        StateHasChanged();
+        ApplyFilters();
         return Task.CompletedTask;
     }
 
-    private static (DateTime Start, DateTime End) CalculateDateRange(DateRangeOption option)
+    private Task OnStatusFilterChanged(StatusFilterOption filter, bool isChecked)
     {
-        var today = DateTime.Today;
-        return option.DaysBack switch
-        {
-            -1 =>
-              (today.AddDays(-1), today.AddDays(-1)),
-            0 =>
-              (today, today),
-            _ =>
-              (today.AddDays(-option.DaysBack), today)
-        };
+        filter.IsSelected = isChecked;
+        ApplyFilters();
+        return Task.CompletedTask;
     }
+
+    private void ApplyFilters()
+    {
+        var selectedStatuses = StatusFilters
+            .Where(filter => filter.IsSelected)
+            .Select(filter => filter.Status)
+            .ToList();
+
+        if (!selectedStatuses.Any())
+        {
+            Transactions = Array.Empty<TransactionEntry>();
+            return;
+        }
+
+        var query = AllTransactions
+            .Where(transaction => selectedStatuses.Contains(transaction.Status));
+
+        if (SelectedDateRange is not null)
+        {
+            var (start, end) = CalculateDateRange(SelectedDateRange);
+            query = query.Where(transaction => transaction.OccurredOn.Date >= start && transaction.OccurredOn.Date <= end);
+        }
+
+        Transactions = query
+            .OrderByDescending(transaction => transaction.OccurredOn)
+            .ThenBy(transaction => transaction.Name, StringComparer.Ordinal)
+            .ToList();
+    }
+
+    private (DateTime Start, DateTime End) CalculateDateRange(DateRangeOption option)
+    {
+        var (start, end) = option.Resolve(DateAnchor);
+        return (start.Date, end.Date);
+    }
+
+    private static int CountByStatus(IEnumerable<TransactionEntry> transactions, TransactionStatus status) =>
+        transactions.Count(transaction => transaction.Status == status);
 
     private enum TransactionStatus
     {

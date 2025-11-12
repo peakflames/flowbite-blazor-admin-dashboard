@@ -194,7 +194,8 @@
                 {
                   <DropdownItem>
                     <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
-                      <Checkbox @bind-Checked="filter.IsSelected" />
+                      <Checkbox Checked="filter.IsSelected"
+                                CheckedChanged="value => OnStatusFilterChanged(filter, value)" />
                       <span>@filter.Label (@filter.Count)</span>
                     </label>
                   </DropdownItem>
@@ -257,7 +258,7 @@
                 @transaction.Name
               </TableCell>
               <TableCell class="px-4 py-3 text-gray-500 dark:text-gray-300">
-                @transaction.Date
+                @transaction.DisplayDate
               </TableCell>
               <TableCell class="px-4 py-3 text-gray-900 dark:text-white">
                 @transaction.Amount
